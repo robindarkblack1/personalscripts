@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Todo App</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .app-container {
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .todo-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+        .todo-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+        .todo-actions button {
+            margin-left: 5px;
+        }
+        .delete-animation {
+            animation: fadeOut 0.5s ease-in-out forwards;
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.9); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <h2 class="mb-3">📝 Todo App</h2>
+        <input class="form-control mb-3" id="searchInput" type="search" placeholder="Search Todos">
+        <div class="form-container">
+            <form action="/submit" method="POST">
+                <input type="text" class="form-control mb-2" name="title" placeholder="Title" required>
+                <textarea class="form-control mb-2" rows="2" name="description" placeholder="Description" required></textarea>
+                <button type="submit" class="btn btn-primary w-100">Add Todo</button>
+            </form>
+        </div>
+        <div id="todoList">
+            {% if not todo %}
+                <p class="text-center text-light">No Todos Found</p>
+            {% else %}
+                {% for task in todo %}
+                <div class="todo-item" id="todo-{{ task.id }}">
+                    <div>
+                        <h6 class="mb-1">📌 {{ task.title }}</h6>
+                        <small class="text-warning"><i class="fas fa-clock"></i> {{ task.date }}</small>
+                    </div>
+                    <div class="todo-actions">
+                        <a href="/update/{{ task.id }}" class="btn btn-success btn-sm"><i class="fas fa-edit"></i></a>
+                        <button onclick="deleteTodo({{ task.id }})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let filter = this.value.toLowerCase();
+            document.querySelectorAll('.todo-item').forEach(todo => {
+                let title = todo.textContent.toLowerCase();
+                todo.style.display = title.includes(filter) ? '' : 'none';
+            });
+        });
+        function deleteTodo(id) {
+            let todoElement = document.getElementById(`todo-${id}`);
+            todoElement.classList.add('delete-animation');
+            setTimeout(() => {
+                window.location.href = `/delete/${id}`;
+            }, 500);
+        }
+    </script>
+</body>
+</html>
