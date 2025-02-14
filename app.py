@@ -87,4 +87,4 @@ if __name__ == '__main__':
             f"{tcolor.MAGENTA}Error in function '{function_name}' {tcolor.RESET}"
             f"{tcolor.MAGENTA}(File: {file_name}, Line: {line_number}): {str(e)}{tcolor.RESET}\n"
         )
-        print(error_message)
+        print(error_message)  
