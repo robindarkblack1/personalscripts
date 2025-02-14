@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Compiler</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.43.0/min/vs/loader.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        #editor {
+            text-align: left;
+            width: 80%;
+            height: 400px;
+            border: 1px solid #333;
+            margin: auto;
+            background: #252526;
+            border-radius: 5px;
+        }
+
+      #output {
+    width: 80%;
+    height: 200px;
+    background: #121212;  /* Dark terminal background */
+    border: 1px solid #333;
+    margin: auto;
+    padding: 10px;
+    white-space: pre-wrap;
+    text-align: left;
+    color: #ffffff;  /* White text */
+    font-family: monospace;
+    border-radius: 5px;
+    overflow-y: auto;
+    position: relative;
+}
+
+#terminal-input {
+    display: inline-block;
+    background: transparent;
+    color: #ffffff;
+    font-family: monospace;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    width: 70%;
+}
+
+.cursor::after {
+    content: "_";
+    display: inline-block;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #007acc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #005f99;
+        }
+        /* #user-input {
+            display: none;
+            width: 78%;
+            padding: 8px;
+            margin-top: 10px;
+            font-size: 16px;
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #333;
+            font-family: monospace;
+        } */
+    </style>
+</head>
+<body>
+    <h1>Python Compiler</h1>
+    <div id="editor"></div>
+    <button onclick="runCode()">Run</button>
+    <h2>Output:</h2>
+    <div id="output"></div>
+    <input type="text" id="user-input" placeholder="Enter input..." onkeypress="handleUserInput(event)">
+    <script>
+       let sessionId = null;
+
+require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.43.0/min/vs' }});
+require(['vs/editor/editor.main'], function () {
+    const initialCode = localStorage.getItem("editorCode") || "print('Hello, World!')\n";
+    window.editor = monaco.editor.create(document.getElementById('editor'), {
+        value: initialCode,
+        language: "python",
+        theme: "vs-dark",
+        automaticLayout: true,
+        fontSize: 14,
+        scrollBeyondLastLine: false,
+        minimap: { enabled: false }
+    });
+});
+
+function runCode() {
+    const code = editor.getValue();
+    localStorage.setItem("editorCode", code);
+
+    // Reset output display
+    const outputDiv = document.getElementById("output");
+    outputDiv.innerText = "Running...";
+    document.getElementById("user-input").style.display = "none";
+    document.getElementById("user-input").value = ""; // Clear previous input
+    sessionId = null; // Reset session
+
+    fetch('/compiler', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: code })
+    })
+    .then(response => response.json())
+    .then(data => handleOutput(data))
+    .catch(error => outputDiv.innerText = "Error: " + error);
+}
+
+function handleOutput(data) {
+    const outputDiv = document.getElementById("output");
+
+    // Remove previous input field if it exists
+    document.querySelector("#terminal-input")?.remove();
+
+    let outputText = data.output ? data.output.trim() : "";
+    let lastLine = outputDiv.innerHTML.trim().split("<br>").pop();
+
+    // If there's user input, keep it on the same line as "$"
+    if (data.user_input) {
+        lastLine = lastLine.replace(/<span class="command">\$ ?<\/span>$/, ""); // Remove empty $
+        outputDiv.innerHTML = outputDiv.innerHTML.trim() + ` ${data.user_input}<br>`;
+    }
+
+    // Append program output AFTER user input
+    if (outputText) {
+        outputDiv.innerHTML += `${outputText}<br>`;
+    }
+
+    if (data.session_id) {
+        sessionId = data.session_id;
+        
+        // Ensure prompt is inline for next input
+        outputDiv.innerHTML += `<span class="command">$</span> <input type="text" id="terminal-input" autofocus>`;
+        document.getElementById("terminal-input").focus();
+    }
+
+    outputDiv.scrollTop = outputDiv.scrollHeight; // Auto-scroll to latest output
+}
+
+document.addEventListener("keypress", function(event) {
+    if (event.key === "Enter" && sessionId) {
+        const terminalInput = document.getElementById("terminal-input");
+        if (!terminalInput) return;
+
+        const userInput = terminalInput.value.trim();
+        if (!userInput) return;
+
+        const outputDiv = document.getElementById("output");
+        
+        // Remove input field and append user input to the same line
+        let lastLine = outputDiv.innerHTML.trim().split("<br>").pop();
+        lastLine = lastLine.replace(/<span class="command">\$ ?<\/span>$/, ""); // Remove empty $
+        outputDiv.innerHTML = outputDiv.innerHTML.trim() + ` ${userInput}<br>`;
+
+        terminalInput.remove(); // Remove input box after submission
+
+        fetch('/compiler', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: sessionId, user_input: userInput })
+        })
+        .then(response => response.json())
+        .then(data => handleOutput(data))
+        .catch(error => outputDiv.innerHTML += `<br>Error: ${error}`);
+    }
+});
+
+
+function handleUserInput(event) {
+    if (event.key === "Enter" && sessionId) {
+        const userInput = document.getElementById("user-input").value.trim();
+        if (!userInput) return;  // Ignore empty inputs
+
+        // Append user input to terminal
+        const outputDiv = document.getElementById("output");
+        outputDiv.innerHTML += `<br><span class="command">$ ${userInput}</span>`;
+        
+        document.getElementById("user-input").value = ""; // Clear input box
+        document.getElementById("user-input").style.display = "none"; // Hide until needed
+
+        fetch('/compiler', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: sessionId, user_input: userInput })
+        })
+        .then(response => response.json())
+        .then(data => handleOutput(data))
+        .catch(error => outputDiv.innerHTML += `<br>Error: ${error}`);
+    }
+}
+
+    </script>
+    
+</body>
+</html>
