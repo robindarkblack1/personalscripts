@@ -36,6 +36,7 @@ def create_app():
     # Define routes inside create_app
     @app.route('/')
     def index():
+        x = 1/0
         """Handles the home page route."""
         ist = pytz.timezone('Asia/Kolkata')
         current_time = datetime.now(ist).strftime('%I:%M %p').lstrip("0")
