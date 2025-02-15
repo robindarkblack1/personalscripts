@@ -22,5 +22,5 @@ class RegisterForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     email = StringField('Email', [DataRequired(),Email()], render_kw={"placeholder": "email" , "class":"form-control"})
-    password = StringField('Password', [DataRequired()], render_kw={"placeholder": "password" , "class":"form-control"})
+    password = StringField('Password', [DataRequired()], render_kw={"placeholder": "password" , "class":"form-control","type":"password"})
     submit = SubmitField('Login', render_kw={"class":"btn btn-primary"})

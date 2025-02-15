@@ -1,26 +1,29 @@
 from flask import Flask, render_template
-from util.db import db, User
+from util.db import db, User , Webpage
 from config import config
 from flask_login import LoginManager
 from datetime import datetime
 import pytz, requests, os, traceback
 from util.functions import tcolor, handle_exception, setup_logging, START_FLAG, STOP_FLAG
 from util.helper import safe_import
-
-    
+from util.auth import configure_oauth
 def create_app():
     """Initialize and configure the Flask app."""
     app = Flask(__name__)
     app.config.from_object(config)
+    oauth = configure_oauth(app)
     db.init_app(app)
 
     # Safe imports
     comp = safe_import('routes.compiler', 'comp')
     todo = safe_import('routes.todo', 'todo')
+    admin = safe_import('routes.admin_routes', 'admin_routes')
+
 
     # Register blueprints
     app.register_blueprint(comp.comp)
     app.register_blueprint(todo.todo)
+    app.register_blueprint(admin.admin_routes)
 
     # Global error handler
     app.register_error_handler(Exception, handle_exception)
@@ -52,7 +55,8 @@ def create_app():
             temperature_c = 'N/A'
             print(f"Error fetching weather data: {e}")
 
-        return render_template('home.html', time=current_time, hometime=formatted_date, temp=temperature_c)
+        page = Webpage.query.filter_by(slug='home').first()
+        return render_template('home.html', time=current_time, hometime=formatted_date, temp=temperature_c,page=page)
 
     return app
 

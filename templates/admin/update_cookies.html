@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Cookies</title>
+</head>
+<body>
+    <h1>Update Cookies</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div style="color: {{ 'red' if category == 'error' else 'green' }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+    <form action="/admin/update_cookies" method="post" enctype="multipart/form-data">
+        <label for="cookies_file">Choose cookies.txt file:</label>
+        <input type="file" id="cookies_file" name="cookies_file" required>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>

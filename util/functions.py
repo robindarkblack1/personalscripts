@@ -4,7 +4,6 @@ from functools import wraps
 from flask import jsonify,render_template
 from datetime import datetime
 
-    
 class tcolor:
     BLACK   = "\033[0;30m"   # Black
     RED     = "\033[0;31m"   # Red
@@ -81,10 +80,10 @@ def stopping():
     except Exception as e:
         print(f"{tcolor.YELLOW}Error during cleanup: {e}{tcolor.RESET}")
 # Ensure logs directory exists
+
 log_dir = "Log"
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
-
 log_file = os.path.join(log_dir, "error.log")
 
 def handle_exception(e):

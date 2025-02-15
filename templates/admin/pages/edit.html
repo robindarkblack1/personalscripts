@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Pages List</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .search-bar {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .page-list {
+            list-style: none;
+            padding: 0;
+        }
+        .page-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+        }
+        .page-item:last-child {
+            border-bottom: none;
+        }
+        .modify-button {
+            padding: 8px 12px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .modify-button:hover {
+            background-color: #218838;
+        }
+        .add-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .add-button:hover {
+            background: #0056b3;
+        }
+    </style>
+    <script>
+        function searchPages() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let items = document.getElementsByClassName('page-item');
+            
+            for (let i = 0; i < items.length; i++) {
+                let title = items[i].getElementsByTagName("span")[0].textContent.toLowerCase();
+                items[i].style.display = title.includes(input) ? "flex" : "none";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Web Pages List</h2>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search for a web page..." onkeyup="searchPages()">
+        <ul class="page-list">
+        {% if pages %}
+        {% for page in pages %}
+            <li class="page-item">
+                <span>{{ page.title }}</span>
+                <a href="/admin/edit/{{ page.slug }}"><button class="modify-button">Modify</button></a>
+            </li>
+        {% endfor %}
+        {% else %}
+            <p>No pages found</p>
+        {% endif %}
+        </ul>
+        <a href="/admin/webpage/add" class="add-button">Add New Page</a>
+    </div>
+</body>
+</html>

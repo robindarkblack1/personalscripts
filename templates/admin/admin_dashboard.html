@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #2d2f34;
+            color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar .role {
+            font-size: 16px;
+            color: #aaa;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .dashboard {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .buttons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .button:active {
+            transform: scale(0.98);
+        }
+
+        .button:focus {
+            outline: none;
+        }
+
+        .button i {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .activity-section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-section h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .activity-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .activity-section ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .activity-section ul li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="title">Welcome to Admin Panel</div>
+        <div class="role">Role: {{role}}</div>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="Search for a feature...">
+    </div>
+
+    <div class="dashboard">
+        <div class="buttons-container">
+            <button class="button" onclick="window.location.href='/admin/records'">
+                <i class="fas fa-users"></i>
+                Manage Users
+            </button> 
+            <button class="button" onclick="window.location.href='/admin/login_history'">
+                <i class="fas fa-history"></i>
+                Login History
+            </button>
+            <button class="button" onclick="window.location.href='/admin/update_cookies'">
+                <i class="fas fa-upload"></i>
+                Upload Cookies
+            </button>
+            <button class="button" onclick="window.location.href='/logout_admin'">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </button>
+            <button class="button">
+                <i class="fas fa-cogs"></i>
+                Settings
+            </button>
+            <button class="button">
+                <i class="fas fa-bell"></i>
+                Notifications
+            </button>
+            <button class="button">
+                <i class="fas fa-chart-line"></i>
+                Analytics
+            </button>
+            <button class="button">
+                <i class="fas fa-shield-alt"></i>
+                Security
+            </button>
+           <button class="button" onclick="window.location.href='/admin/edit'">
+                <i class="fas fa-shield-alt"  ></i>
+                Manage WebPage
+            </button>
+        </div>
+
+        <div class="activity-section">
+            <h2>Recent Activity</h2>
+            <ul>
+                {% for activity in recent_activities %}
+            <li>
+                <strong>{{ activity.user_email }}</strong>: {{ activity.action }} <br>
+                <small>{{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+            </li>
+        {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

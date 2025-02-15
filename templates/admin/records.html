@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - User Records</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>User Records</h1>
+      {% if user.role == 'admin' or user.role == 'editor' %}
+      <div class="actions">
+
+        <button class="add-btn"><a href="/admin/add">Add User</a></button>
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for emails..">
+      </div>
+      {% endif %} 
+    </header>
+
+    <table class="user-table" id="userTable">
+      <thead>
+        <tr>
+          <th>SNo</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Password</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ record.name }}</td>
+          <td>{{ record.email }}</td>
+          <td>{{ record.password }}</td>
+          {% if user.role == 'admin' %}
+          <td>
+            <button class="update-btn"><a href="/admin/update/{{ record.sno }}">Update</a></button>
+            <button class="delete-btn"><a href="/admin/delete/{{ record.sno }}" onclick="return confirm('Are you sure?')">Delete</a></button>
+          </td>
+          {% elif user.role == 'editor' %}
+          <td><button><a href="/admin/update/{{ record.sno }}">Update</a></button></td>
+        {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button class="pagination-btn" id="prevBtn" onclick="prevPage()">Previous</button>
+      <span id="pageNumber">Page 1</span>
+      <button class="pagination-btn" id="nextBtn" onclick="nextPage()">Next</button>
+    </div>
+  </div>
+<div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <ul>
+      {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+</div>
+  <script >
+    let currentPage = 1;
+const rowsPerPage = 5;
+const table = document.getElementById("userTable");
+const tbody = table.getElementsByTagName("tbody")[0];
+const rows = tbody.getElementsByTagName("tr");
+
+function displayRows() {
+  const totalRows = rows.length;
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = Math.min(start + rowsPerPage, totalRows);
+
+  // Hide all rows
+  for (let i = 0; i < totalRows; i++) {
+    rows[i].style.display = "none";
+  }
+
+  // Show the correct rows for the current page
+  for (let i = start; i < end; i++) {
+    rows[i].style.display = "";
+  }
+
+  document.getElementById("pageNumber").textContent = `Page ${currentPage}`;
+  document.getElementById("prevBtn").disabled = currentPage === 1;
+  document.getElementById("nextBtn").disabled = end === totalRows;
+}
+
+function nextPage() {
+  currentPage++;
+  displayRows();
+}
+
+function prevPage() {
+  currentPage--;
+  displayRows();
+}
+
+// Initialize the first display
+displayRows();
+
+// Search functionality
+function searchTable() {
+  const input = document.getElementById("searchInput");
+  const filter = input.value.toLowerCase();
+  const rows = tbody.getElementsByTagName("tr");
+
+  for (let i = 0; i < rows.length; i++) {
+    const name = rows[i].getElementsByTagName("td")[2];
+    if (name) {
+      const txtValue = name.textContent || name.innerText;
+      rows[i].style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
+    }
+  }
+}
+
+  </script>
+</body>
+</html>

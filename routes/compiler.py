@@ -2,6 +2,7 @@ import uuid
 import subprocess
 import os
 import re
+from util.db import db,Webpage
 from flask import request, jsonify, render_template,blueprints
 
 sessions = {}
@@ -93,3 +94,6 @@ def extract_first_input_prompt(code):
 def input_is_still_needed(output):
     """Checks if another input is required based on output."""
     return "enter a number" in output.lower() or "again" in output.lower()
+
+
+

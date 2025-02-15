@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin Panel Login</title>
+	<style>
+		.alert {
+			padding: 20px;
+			background-color: #f44336;
+			color: white;
+			margin-bottom: 15px;
+			animation: fadein 2s;
+			z-index: 5;
+		}
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #333;
+			color: #fff;
+			font-family: Arial, sans-serif;
+		}
+		
+		h1 {
+			text-align: center;
+			font-size: 48px;
+			margin-top: 50px;
+			animation: fadein 2s;
+		}
+		
+		h2 {
+			text-align: center;
+			font-size: 24px;
+			margin-top: 10px;
+			animation: fadein 2s;
+		}
+		
+		form {
+			margin-top: 50px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			animation: fadein 2s;
+		}
+		
+		label {
+			font-size: 20px;
+			margin-bottom: 10px;
+			animation: fadein 2s;
+		}
+		
+		input[type="text"], input[type="password"] {
+			padding: 10px;
+			font-size: 20px;
+			border-radius: 5px;
+			border: none;
+			background-color: #fff;
+			width: 300px;
+			margin-bottom: 20px;
+			animation: fadein 2s;
+		}
+		
+		button[type="submit"] {
+			padding: 10px 20px;
+			font-size: 20px;
+			border-radius: 5px;
+			border: none;
+			background-color: #4CAF50;
+			color: #fff;
+			cursor: pointer;
+			animation: fadein 2s;
+		}
+		
+		.icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-top: 20px;
+			animation: bouncein 2s;
+		}
+		
+		.icon i {
+			font-size: 48px;
+			margin: 0 10px;
+			animation: spin 2s linear infinite;
+		}
+		
+		@keyframes fadein {
+			from { opacity: 0; }
+			to { opacity: 1; }
+		}
+		
+		@keyframes bouncein {
+			from {
+				transform: translateY(-100px);
+				opacity: 0;
+			}
+			to {
+				transform: translateY(0);
+				opacity: 1;
+			}
+		}
+		
+		@keyframes spin {
+			from { transform: rotate(0deg); }
+			to { transform: rotate(360deg); }
+		}
+    /* design of background dotted */
+
+#myCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+#myContent {
+  position: relative;
+  z-index: 0;
+}
+
+body {
+  position: relative;
+  background-color: #000;
+  overflow: hidden;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  
+  
+}
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+	</style>
+</head>
+<body>
+  <canvas id="myCanvas"></canvas>
+	<h1>Welcome to the Admin Panel</h1>
+	<h2>Please login to continue</h2>
+	
+	{% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <center><div class="alert">
+      {% for message in messages %}
+         <li> {{ message }} </li>
+      {% endfor %}
+  </div></center>
+  {% endif %}
+  {% endwith %}
+
+
+	<form method="POST" action="/admin">
+		<label for="name">Email:</label>
+		<input type="text" id="email" name="email" required>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" required>
+		<button type="submit">Login</button>
+	</form>
+	<div class="icon">
+		<i class="fa fa-lock" aria-hidden="true"></i>
+		<i class="fa fa-user" aria-hidden="true"></i>
+		<i class="fa fa-key" aria-hidden="true"></i>
+	</div>
+  <script>// set canvas width and height
+    var canvas = document.getElementById('myCanvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    // get canvas context
+    var ctx = canvas.getContext('2d');
+    
+    // set dots properties
+    var dots = [];
+    var numDots = 200;
+    var dotRadius = 2;
+    var maxDistance = 70;
+    var greenLines = [];
+    
+    // create dots
+    for (var i = 0; i < numDots; i++) {
+        dots.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 1,
+            vy: (Math.random() - 0.5) * 1
+        });
+    }
+    
+    // draw dots and lines
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+        // draw green lines between nearby dots
+        for (var i = 0; i < dots.length; i++) {
+            var nearbyDots = [];
+            for (var j = 0; j < dots.length; j++) {
+                if (i !== j) {
+                    var distance = Math.sqrt((dots[i].x - dots[j].x)**2 + (dots[i].y - dots[j].y)**2);
+                    if (distance <= maxDistance) {
+                        nearbyDots.push(j);
+                    }
+                }
+            }
+            if (nearbyDots.length >= 4) {
+                for (var k = 0; k < nearbyDots.length; k++) {
+                    var j = nearbyDots[k];
+                    var distance = Math.sqrt((dots[i].x - dots[j].x)**2 + (dots[i].y - dots[j].y)**2);
+                    if (distance <= maxDistance) {
+                        greenLines.push([dots[i].x, dots[i].y, dots[j].x, dots[j].y]);
+                        if (greenLines.length > 100) {
+                            greenLines.shift();
+                        }
+                    }
+                }
+            }
+        }
+    
+        // draw green lines
+        ctx.beginPath();
+        ctx.strokeStyle = '#00FF00';
+        ctx.lineWidth = 0.3;
+        for (var i = 0; i < greenLines.length; i++) {
+            ctx.moveTo(greenLines[i][0], greenLines[i][1]);
+            ctx.lineTo(greenLines[i][2], greenLines[i][3]);
+        }
+        ctx.stroke();
+    
+        // draw dots
+        for (var i = 0; i < dots.length; i++) {
+            ctx.beginPath();
+            ctx.arc(dots[i].x, dots[i].y, dotRadius, 0, Math.PI * 2);
+            ctx.fillStyle = '#00FF00';
+            ctx.fill();
+            dots[i].x += dots[i].vx;
+            dots[i].y += dots[i].vy;
+    
+            // bounce dots off walls
+            if (dots[i].x < 0 || dots[i].x > canvas.width) {
+                dots[i].vx *= -1;
+            }
+            if (dots[i].y < 0 || dots[i].y > canvas.height) {
+                dots[i].vy *= -1;
+            }
+        }
+    
+        requestAnimationFrame(draw);
+    }
+    
+    draw();
+    </script>
+</body>
+</html>
