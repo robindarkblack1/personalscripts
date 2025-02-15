@@ -1,0 +1,795 @@
+body{
+    background-image: url("../img/vivobg.png");
+}
+
+.mobile-nav{
+    background: rgba(0, 0, 0, 0.3); /* Darker transparent effect */
+    backdrop-filter: blur(12px); /* Slightly stronger blur */
+    -webkit-backdrop-filter: blur(12px); /* For Safari support */
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.notifications{
+    font-size: 15px;
+    height: 15px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}
+/* 📢 Notification Panel - Mobile Style */
+.notification-card {
+    position: fixed;
+    top: -100vh; /* Completely Hidden Initially */
+    left: 0;
+    width: 100vw; /* Full Width */
+    height: 100vh; /* Covers 40% of Screen Height */
+    background: rgba(20, 20, 20, 0.9); /* Dark Glassy Effect */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: white;
+    padding: 20px;
+    border-radius: 0 0 20px 20px; /* Rounded Bottom Corners */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+    transition: top 0.4s ease-in-out;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Brightness Control Section */
+.brightness-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 12px;
+}
+
+/* Brightness Icon */
+.brightness-control i {
+    font-size: 20px;
+    color: #FFD700;
+}
+
+/* Brightness Slider */
+.brightness-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    background: linear-gradient(90deg, #FFD700, #FF4500);
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+/* Slider Thumb */
+.brightness-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+}
+
+
+/* When Active - Slide Down */
+.notification-card.show {
+    top: 0;
+}
+
+/* Notification Items */
+.notification-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s ease;
+}
+
+/* Hover Effect */
+.notification-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Notification Icons */
+.notification-item i {
+    font-size: 18px;
+    color: #FFD700; /* Gold Accent */
+}
+
+
+
+.battery{
+    height: 19px;
+    float: right;
+    margin-right: 10px;
+}
+
+.home-screen{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* min-height: 200px; */
+
+    margin-right: 15px;
+}
+
+.time {
+    font-size: 35px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.small-text {
+    font-size: 15px;
+    margin-top: -5px; /* Adjust as needed */
+}
+
+
+
+.second-row {
+    display: flex; /* Align icons in a row */
+    gap: 10px; /* Space between icons */
+    margin-left: 30px;
+    margin-bottom: 20px;
+    margin-top: 120px;
+}
+.third-row {
+    display: flex; /* Align icons in a row */
+    gap: 10px; /* Space between icons */
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+.fourth-row {
+    display: flex; /* Align icons in a row */
+    gap: 10px; /* Space between icons */
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+.fifth-row {
+    display: flex; /* Align icons in a row */
+    gap: 10px; /* Space between icons */
+    margin-left: 30px;
+    margin-bottom: 10vh;
+}
+
+
+.icon-container {
+    display: flex;
+    flex-direction: column; /* Stack icon and text */
+    align-items: center; /* Center content */
+    text-align: center;
+}
+
+.icon1 {
+    background-color: black;
+    height: 45px;
+    width: 50px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bio {
+    background-image: url("../img/a.jpg");
+    background-size: cover; 
+    height: 45px;
+    width: 50px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.forms{
+    background-image: url("../img/forms.png");
+    background-size: cover; 
+    height: 45px;
+    width: 50px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.stayhydrated{
+    background-image: url("../img/Icon.ico");
+    background-size: cover; 
+    height: 45px;
+    width: 50px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon1 i {
+    font-size: 32px; /* Adjust icon size */
+    color: white; /* Change icon color */
+}
+.linkedin {
+    background-color: rgb(6, 17, 134);
+    background-size: cover; 
+    height: 45px;
+    width: 50px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.linkedin i {
+    font-size: 25px; /* Adjust icon size */
+    color: white; /* Change icon color */
+}
+
+
+.activities {
+    width: 50px;
+    height: 45px;
+    background: linear-gradient(135deg, #1e1e1e, #3a3a3a); /* Dark glossy gradient */
+    border-radius: 12px; /* Rounded square */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    margin-right: -180px;
+}
+
+.acti-lable{
+    margin-right: -180px;
+}
+
+
+/* Icon inside the button */
+.activities i {
+    font-size: 22px;
+    color: white;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Subtle hover effect */
+.activities:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(135deg, #2a2a2a, #505050);
+}
+
+.activities:hover i {
+    transform: scale(1.2);
+    color: #ffcc00; /* Golden glow */
+}
+
+/* Inner glow effect */
+.activities::before {
+    content: "";
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+    border-radius: 50%;
+    top: -10%;
+    left: -10%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.activities:hover::before {
+    opacity: 1;
+}
+
+
+.activity-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 10px 0;
+    color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.activity-card h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #ffcc00;
+}
+
+.activity-card p {
+    font-size: 14px;
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.activity-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.insta {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    background-size: cover; 
+    height: 45px;
+    width: 50px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.insta i {
+    font-size: 25px; /* Adjust icon size */
+    color: white; /* Change icon color */
+}
+.todo {
+    background: linear-gradient(45deg, #4facfe, #00f2fe); /* Custom gradient for To-Do */
+    height: 45px;
+    width: 50px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 242, 254, 0.4); /* Optional glow */
+}
+
+.todo i {
+    font-size: 20px; /* Adjust icon size */
+    color: white; /* Make sure icon is visible */
+}
+
+.message-icon {
+    background-color: rgb(11, 118, 206);
+    height: 45px;
+    width: 50px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message-icon i {
+    margin-top: 5px;
+    font-size: 28px; /* Adjust icon size */
+    color: white; /* Change icon color */
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.message {
+    background: linear-gradient(135deg, #2193b0, #7cbac8);
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    /* font-weight: bold; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.message:hover {
+    transform: scale(1.05);
+}
+
+
+.icon-label {
+    font-size: 12px;
+    color: white;
+    margin-top: 3px;
+}
+
+.app-drawer {
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); /* Soft pink-orange gradient */
+    height: 50px;
+    width: 50px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(255, 154, 158, 0.5); /* Glow effect */
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.app-drawer:hover {
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
+.app-drawer i {
+    font-size: 22px;
+    color: white;
+}
+
+
+
+
+.bottom-icon {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 icons per row */
+    gap: 10px; /* Space between icons */
+    justify-content: center;
+}/* Small Window: Fixed Size & Scrollable */
+/* Small Window: Fixed Size & Scrollable */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.small-window {
+    position: fixed;
+    top: -100vh;
+    left: 5vw;
+    width: 90vw;
+    height: 90vh;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    padding:20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 101;
+    opacity: 0;
+    transition: top 0.6s ease, opacity 0.3s ease;
+    overflow-y: auto;  /* Enables smooth scrolling */
+    font-family: 'Poppins', sans-serif; 
+}
+
+/* Show Window */
+.small-window.show {
+    top: 5vh;
+    opacity: 1;
+}
+
+/* Hide Window */
+.small-window.hide {
+    top: -100vh;
+    opacity: 0;
+}
+
+#window-content h2{
+    margin-top: 5px;
+}
+
+/* Header Styling */
+.bio-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.bio-header h2 {
+    font-size: 2rem;
+    margin: 0;
+    font-weight: bold;
+}
+
+.bio-header p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* Bio Info */
+.bio-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.bio-info p {
+    margin: 5px 0;
+    font-size: 1.1rem;
+}
+
+.bio-info a {
+    color: #ffdd57; /* Soft yellow for contrast */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.bio-info a:hover {
+    text-decoration: underline;
+}
+
+/* Sections */
+.bio-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1); /* Light Glassmorphism effect */
+    border-radius: 10px;
+}
+
+.bio-section h3 {
+    font-size: 1.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.bio-section p, .bio-section ul {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Skill List */
+.bio-section ul {
+    list-style-type: none; /* Remove bullets */
+    padding: 0;
+}
+
+.bio-section ul li {
+    display: flex;
+    flex-direction: column; /* Stack items properly */
+    margin-bottom: 8px; /* Add spacing */
+    margin-right: 5px;
+    font-size: 16px; /* Optimize for mobile readability */
+    word-wrap: break-word; /* Ensure no overflow */
+}
+
+
+/* Education Section */
+.bio-section p b {
+    color: #ffdd57; /* Highlight important text */
+}
+
+
+.top {
+    font-size: 30px;
+    display: flex;
+    justify-content: space-between; /* Align text left and close button right */
+    align-items: center;
+    padding: 10 10 10 4;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Style for the cross close icon */
+.close-icon {
+    font-size: 28px;
+    cursor: pointer;
+    color: red;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.close-icon:hover {
+    color: red;
+}
+
+.drawer-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* min-height: 200px; */
+    margin-right: 15px;
+}
+.drawer-body .second-row{
+
+        display: flex; /* Align icons in a row */
+        gap: 10px; /* Space between icons */
+        margin-left: 10px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+.drawer-body .icon-label{
+    color: white;
+}
+.drawer-body .icon-container{
+    margin-right: 50px;
+}
+
+a{
+    text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+
+/* Full-screen browser card */
+#browser-card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000; /* Black background for a clean UI */
+    display: none; /* Hidden by default */
+    z-index: 9999;
+}
+
+/* Header with close button */
+.browser-header {
+    position: absolute;
+    top: 5px; /* Move it up */
+    right: 10px; /* Align to right */
+    width: auto; /* Prevent full width issue */
+    display: flex;
+    justify-content: flex-end; /* Align close button to the right */
+    z-index: 10000; /* Ensure it's above iframe */
+}
+
+/* Close button styling */
+.close-btn {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 22px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10001; /* Ensure button is clickable */
+    position: relative; /* Make it interactable */
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Fullscreen iframe */
+#browser-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Loader animation */
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top: 5px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+/* Keyframe for spinning loader */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+
+
+
+.iphone-notification {
+    position: fixed;
+    top: -80px; /* Initially hidden */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 15px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: sans-serif;
+    font-size: 14px;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.notif-icon {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.iphone-notification.show {
+    top: 20px; /* Moves into view */
+    opacity: 1;
+}
+
+.iphone-notification.hide {
+    top: -80px; /* Moves out */
+    opacity: 0;
+}
+
+
+/* Custom Notification Styling */
+.custom-notification {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30, 30, 30, 0.95);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 320px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    z-index: 102;
+}
+
+/* Show animation */
+.custom-notification.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+/* Notification Icon */
+.notification-icon {
+    font-size: 20px;
+    background: white;
+    color: black;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+/* Notification Content */
+.notification-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.notification-message {
+    font-size: 14px;
+    margin: 5px 0 0;
+}
+
+/* Hide animation */
+.custom-notification:not(.show) {
+    transform: translateX(-50%) translateY(-20px);
+    opacity: 0;
+}

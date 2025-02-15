@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,jsonify,request,Response
 from util.db import db, User , Webpage
 from config import config
 from flask_login import LoginManager
@@ -7,6 +7,8 @@ import pytz, requests, os, traceback
 from util.functions import tcolor, handle_exception, setup_logging, START_FLAG, STOP_FLAG
 from util.helper import safe_import
 from util.auth import configure_oauth
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
 def create_app():
     """Initialize and configure the Flask app."""
     app = Flask(__name__)
@@ -47,16 +49,62 @@ def create_app():
         location = 'Panipat,Haryana'
         api_url = f'http://api.weatherapi.com/v1/current.json?key={api_key}&q={location}&aqi=no'
 
-        try:
-            response = requests.get(api_url)
-            weather_data = response.json()
-            temperature_c = weather_data['current']['temp_c']
-        except Exception as e:
-            temperature_c = 'N/A'
-            print(f"Error fetching weather data: {e}")
-
+        # try:
+        #     response = requests.get(api_url)
+        #     weather_data = response.json()
+        #     temperature_c = weather_data['current']['temp_c']
+        # except Exception as e:
+        #     temperature_c = 'N/A'
+        #     print(f"Error fetching weather data: {e}")
+        temperature_c = 4
         page = Webpage.query.filter_by(slug='home').first()
         return render_template('home.html', time=current_time, hometime=formatted_date, temp=temperature_c,page=page)
+
+
+    TIMEOUT = 60
+    CACHE = {}
+
+    @app.route('/proxy')
+    def proxy():
+        url = request.args.get('url')
+        if not url:
+            return "URL parameter is required", 400
+
+        try:
+            # Return cached response if available
+            if url in CACHE:
+                return CACHE[url]
+
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.0.0 Safari/537.36"
+            }
+            response = requests.get(url, headers=headers, allow_redirects=True, timeout=TIMEOUT)
+
+            # Get content type
+            content_type = response.headers.get("Content-Type", "")
+
+            # Process HTML pages to rewrite URLs
+            if "text/html" in content_type:
+                soup = BeautifulSoup(response.text, "html.parser")
+
+                for tag in soup.find_all(["a", "link", "script", "img"]):
+                    if tag.has_attr("href"):
+                        tag["href"] = f"/proxy?url={urljoin(url, tag['href'])}"
+                    if tag.has_attr("src"):
+                        tag["src"] = f"/proxy?url={urljoin(url, tag['src'])}"
+
+                modified_html = str(soup)
+                CACHE[url] = Response(modified_html, content_type="text/html")
+                return CACHE[url]
+
+            # Cache and return other content types (CSS, JS, images, etc.)
+            CACHE[url] = Response(response.content, content_type=content_type)
+            return CACHE[url]
+
+        except requests.exceptions.Timeout:
+            return "Request timed out", 504
+        except requests.exceptions.RequestException as e:
+            return f"Error fetching page: {str(e)}", 500
 
     return app
 

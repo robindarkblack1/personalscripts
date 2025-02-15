@@ -1,114 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <!-- <meta http-equiv="refresh" content="2" /> -->
-    <meta name="theme-color" content="#234A91">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>{{page.title}}</title>
-    <link rel="stylesheet" href={{url_for( 'static' , filename='css/home.css' )}}>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-</head>
+ {%block title%} {{ page.title | default('Home') }}   {%endblock%}
 
-<body>
-    <nav class="navbar   mobile-nav" data-bs-theme="dark" >
 
-        <div class="notifications">
-            <time id="time">{{time}} <i class="bi bi-instagram ms-2"></i> <i class="bi bi-github ms-1"></i></time>
+ {%block head%}
+ <link rel="stylesheet" href="{{url_for( 'static' , filename='css/home.css' )}}">
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+ integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+ {%endblock%}
 
-        </div>
+{% block body %}
 
-        <div class="battery"><i class="bi bi-wifi me-1"></i> <i class="bi bi-reception-3 me-1"></i> <i
-                class="bi bi-reception-4 me-1"></i> <i class="bi bi-battery-half "></i></div>
+<div id="preloader">
+    <div class="loader"></div>
+</div>
 
-    </nav>
 
-    <div class="notification-card">
-        <div class="notification-item">
-            <i class="bi bi-instagram"></i>
-            <span>You are my new follower! 🎉</span>
-        </div>
-        <div class="notification-item">
-            <i class="bi bi-github"></i>
-            <span>New GitHub Repo: AI Chatbot Project 🚀</span>
-        </div>
-        <div class="notification-item">
-            <i class="bi bi-code-slash"></i>
-            <span>This site have some errors 😒</span>
-        </div>
+
+
     
-        <!-- Brightness Control -->
-        <div class="brightness-control">
-            <i class="bi bi-brightness-high"></i>
-            <input type="range" min="10" max="100" value="100" class="brightness-slider" id="brightness-slider">
+    
+
+<div class="home-screen">
+    <div class="first-row">
+        <div class="time">
+            <span>{{time}}</span>
+            <span class="small-text">{{hometime}}</span>
+            <span class="small-text">{{temp}}°c Panipat, Haryana</span>
         </div>
     </div>
     
-    
-
-    <div class="home-screen">
-        <div class="first-row">
-            <div class="time">
-                <span>{{time}}</span>
-                <span class="small-text">{{hometime}}</span>
-                <span class="small-text">{{temp}}°c Panipat, Haryana</span>
-            </div>
-
-            <div class="second-row">
-                <a href="/dashboard" target="_blank" class="icon-container">
-                    <div class="todo"><i class="bi bi-journal-plus"></i></div>
-                    <span class="icon-label">Todo</span>
-                </a>
-            </div>
-            <div class="third-row">
-                <a href="https://www.instagram.com/bannned_devil/" target="_blank" class="icon-container">
-                    <div class="insta"><i class="bi bi-instagram"></i></div>
-                    <span class="icon-label">Instagram</span>
-                </a>
-            </div>
-            <div class="fourth-row">
-                <a href="https://www.linkedin.com/in/prdeep-verma-4a1364257/" target="_blank" class="icon-container">
-                    <div class="linkedin"><i class="bi bi-linkedin"></i></div>
-                    <span class="icon-label">LinkedIn</span>
-                </a>
-            </div>
-            <div class="fifth-row">
-                <a href="https://github.com/robindarkblack1" target="_blank" class="icon-container">
-                    <div class="icon1"><i class="bi bi-github"></i></div>
-                    <span class="icon-label">GitHub</span>
-                </a>
-                    <div class="icon-container" onclick="openWindow('activities')">
-                    <div class="activities">
-                        <i class="bi bi-lightning-charge-fill"></i> 
-                    </div>
-                    <span class="icon-label acti-lable">Activites</span>
-                </div>
-
-            </div>
-        </div>
-        <div class="bottom-icon">
-            <div class="icon-container" onclick="openWindow('bio')">
-                <div class="bio"></div>
-                <span class="icon-label">Bio</span>
-            </div>
-            <div class="icon-container">
-                <div class="app-drawer" onclick="openWindow('projects')">
-                    <i class="bi bi-grid-fill"></i>
-                </div>                
-                <span class="icon-label">Projects</span>
-            </div>
-            <div class="icon-container" onclick="openWindow('messages')">
-                <div class="message-icon"><i class="bi bi-chat-square-text"></i></div>
-                <span class="icon-label">Message</span>
-            </div>
-        </div>
-
+    <div class="second-row">
+        <a href="/dashboard" target="_blank" class="icon-container" data-app="todo" oncontextmenu="showContextMenu(event, 'todo')">
+            <div class="todo"><i class="bi bi-journal-plus"></i></div>
+            <span class="icon-label">Todo</span>
+        </a>
     </div>
+    
+    <div class="third-row">
+        <a href="https://www.instagram.com/bannned_devil/" target="_blank" class="icon-container" data-app="instagram" oncontextmenu="showContextMenu(event, 'instagram')">
+            <div class="insta"><i class="bi bi-instagram"></i></div>
+            <span class="icon-label">Instagram</span>
+        </a>
+    </div>
+    
+    <div class="fourth-row">
+        <a href="https://www.linkedin.com/in/prdeep-verma-4a1364257/" target="_blank" class="icon-container" data-app="linkedin" oncontextmenu="showContextMenu(event, 'linkedin')">
+            <div class="linkedin"><i class="bi bi-linkedin"></i></div>
+            <span class="icon-label">LinkedIn</span>
+        </a>
+    </div>
+    
+    <div class="fifth-row">
+        <div class="icon-container" onclick="openBrowser('https://github.com/robindarkblack1')" data-app="github" oncontextmenu="showContextMenu(event, 'github')">
+            <div class="icon1"><i class="bi bi-github"></i></div>
+            <span class="icon-label">GitHub</span>
+        </div>
+        <div class="icon-container" onclick="openWindow('activities')" data-app="activities" oncontextmenu="showContextMenu(event, 'activities')">
+            <div class="activities"><i class="bi bi-lightning-charge-fill"></i></div>
+            <span class="icon-label">Activities</span>
+        </div>
+        <div class="icon-container" onclick="toggleSettings()">
+            <div class="setting-icon"><i class="bi bi-gear-fill"></i></div>
+            <span class="icon-label">Settings</span>
+        </div>
+        
+    </div>
+    <!-- <button id="restore-btn" onclick="restoreApps()">Restore Apps</button> -->
+
+    
+    <div class="bottom-icon">
+        <div class="icon-container" onclick="openWindow('bio')">
+            <div class="bio"></div>
+            <span class="icon-label">Bio</span>
+        </div>
+        <div class="icon-container" onclick="openWindow('projects')">
+            <div class="app-drawer"><i class="bi bi-grid-fill"></i></div>
+            <span class="icon-label">Projects</span>
+        </div>
+        <div class="icon-container" onclick="openWindow('messages')">
+            <div class="message-icon"><i class="bi bi-chat-square-text"></i></div>
+            <span class="icon-label">Message</span>
+        </div>
+    </div>
+</div>
+
+<div id="context-menu" class="context-menu">
+    <ul>
+        <li onclick="openSubmenu('apps')">App Info</li>
+        <li onclick="uninstallApp()">Uninstall</li>
+    </ul>
+</div>
+</div>
+
+
+
+
+
+
+
     <div id="small-window" class="small-window">
         <div class="top">
             <span id="window-title">My Projects</span>
@@ -118,230 +111,204 @@
             <!-- Content will change dynamically here -->
         </div>
     </div>
+   
+    <div id="browser-card" class="browser-card">
+        <div class="browser-header">
+            <span class="close-btn" onclick="closeBrowser()">&#x2715;</span>
+        </div>
+        <div class="loader" id="browser-loader"></div>
+        <iframe id="browser-frame" src="" frameborder="0" onload="hideLoader()"></iframe>
+        
+    </div>
+
+
+
+<!-- Settings Card -->
+<div id="settings-card" class="settings settings-card">
+    <div class="settings-header">
+        <span>Settings</span>
+        <button class="close-btn" onclick="toggleSettings()">✖</button>
+    </div>
+    <div class="settings-list">
+        <div class="settings-item" onclick="openSubmenu('apps')"><i class="bi bi-grid"></i> Apps</div>
+        <div class="settings-item" onclick="openSubmenu('wallpaper')"><i class="bi bi-image"></i> Wallpaper</div>
+        <div class="settings-item" onclick="openSubmenu('about')"><i class="bi bi-info-circle"></i> About</div>
+        <div class="settings-item" onclick="toggleDarkMode()">
+            <i id="dark-mode-icon" class="bi bi-moon"></i> <span id="dark-mode-text">Dark Mode</span>
+        </div>
+        <div class="settings-item" onclick="toggleNotifications()"><i class="bi bi-bell"></i> Notifications</div>
+        <div class="settings-item" onclick="toggleWifi()"><i class="bi bi-wifi"></i> Wi-Fi: <span id="wifi-status">On</span></div>
+        <div class="settings-item" onclick="toggleBluetooth()"><i class="bi bi-bluetooth"></i> Bluetooth: <span id="bluetooth-status">Off</span></div>
+        <div class="settings-item" onclick="openSubmenu('language')"><i class="bi bi-globe"></i> Language & Region</div>
+        <div class="settings-item" onclick="openSubmenu('security')"><i class="bi bi-lock"></i> Security</div>
+        <div class="settings-item" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Logout</div>
+    </div>
+</div>
+
+<!-- Security Settings (PIN) -->
+<div id="security-menu" class="settings-submenu">
+    <div class="settings-header">
+        <span>Security</span>
+        <button class="close-btn" onclick="closeSubmenu('security-menu')">✖</button>
+    </div>
+    <div class="settings-list">
+        <input type="password" id="pin-input" placeholder="Set PIN" class="settings-item" />
+        <button onclick="savePin()" class="settings-item"><i class="bi bi-save"></i> Save PIN</button>
+    </div>
+</div>
+
+
+<!-- Language Selection Menu -->
+<div id="language-menu" class="settings-submenu">
+    <div class="settings-header">
+        <span>Language & Region</span>
+        <button class="close-btn" onclick="closeSubmenu('language-menu')">✖</button>
+    </div>
+    <div class="settings-list">
+        <select id="language-select" class="settings-item" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+        </select>
+    </div>
+</div>
+
+<div id="apps-menu" class="settings-submenu">
+    <div class="settings-header">
+        <span>Installed Apps</span>
+        <button class="close-btn" onclick="closeSubmenu('apps-menu')">✖</button>
+    </div>
+    <div class="settings-list">
+        <div class="settings-item" onclick="showAppMenu('todo-menu')">
+            <i class="bi bi-list-check"></i> To-Do
+        </div>
+        <div class="settings-item" onclick="showAppMenu('instagram-menu')">
+            <i class="bi bi-instagram"></i> Instagram
+        </div>
+        <div class="settings-item" onclick="showAppMenu('github-menu')">
+            <i class="bi bi-github"></i> GitHub
+        </div>
+        <div class="settings-item" onclick="showAppMenu('linkedin-menu')">
+            <i class="bi bi-linkedin"></i> LinkedIn
+        </div>
+        <div class="settings-item" onclick="showAppMenu('activities-menu')">
+            <i class="bi bi-activity"></i> Activities
+        </div>
+    </div>
+</div>
+
+<div id="todo-menu" class="settings-submenu app-submenu">
+    <div class="settings-header">
+        <span>To-Do App</span>
+        <button class="close-btn" onclick="hideAppMenu('todo-menu')">✖</button>
+    </div>
+    <div class="app-info">
+        <p><strong>Version:</strong> 1.0</p>
+        <p><strong>Developer:</strong> Pardeep</p>
+        <p>Manage your daily tasks efficiently.</p>
+        <button id="todo-btn" onclick="toggleButton('todo-btn')">Enable</button>
+    </div>
+</div>
+
+<div id="instagram-menu" class="settings-submenu app-submenu">
+    <div class="settings-header">
+        <span>Instagram</span>
+        <button class="close-btn" onclick="hideAppMenu('instagram-menu')">✖</button>
+    </div>
+    <div class="app-info">
+        <p><strong>Version:</strong> 2.0</p>
+        <p><strong>Developer:</strong> Meta</p>
+        <p>Share your moments with the world.</p>
+        <button id="instagram-btn" onclick="toggleButton('instagram-btn')">Enable</button>
+    </div>
+</div>
+
+<div id="github-menu" class="settings-submenu app-submenu">
+    <div class="settings-header">
+        <span>GitHub</span>
+        <button class="close-btn" onclick="hideAppMenu('github-menu')">✖</button>
+    </div>
+    <div class="app-info">
+        <p><strong>Version:</strong> 1.5</p>
+        <p><strong>Developer:</strong> Microsoft</p>
+        <p>Code, collaborate, and contribute.</p>
+        <button id="github-btn" onclick="toggleButton('github-btn')">Enable</button>
+    </div>
+</div>
+
+<div id="linkedin-menu" class="settings-submenu app-submenu">
+    <div class="settings-header">
+        <span>LinkedIn</span>
+        <button class="close-btn" onclick="hideAppMenu('linkedin-menu')">✖</button>
+    </div>
+    <div class="app-info">
+        <p><strong>Version:</strong> 3.2</p>
+        <p><strong>Developer:</strong> LinkedIn Corp</p>
+        <p>Build your professional network.</p>
+        <button id="linkedin-btn" onclick="toggleButton('linkedin-btn')">Enable</button>
+    </div>
+</div>
+
+<div id="activities-menu" class="settings-submenu app-submenu">
+    <div class="settings-header">
+        <span>Activities</span>
+        <button class="close-btn" onclick="hideAppMenu('activities-menu')">✖</button>
+    </div>
+    <div class="app-info">
+        <p><strong>Version:</strong> 1.0</p>
+        <p><strong>Developer:</strong> Pardeep</p>
+        <p>Track and manage your daily activities.</p>
+        <button id="activities-btn" onclick="toggleButton('activities-btn')">Enable</button>
+    </div>
+</div>
+
+
+
+
+
+<!-- Wallpaper Menu -->
+<div id="wallpaper-menu" class="settings-submenu">
+    <div class="settings-header">
+        <span>Wallpaper</span>
+        <button class="close-btn" onclick="closeSubmenu('wallpaper-menu')">✖</button>
+    </div>
+    <div class="settings-list">
+        <div class="settings-item" onclick="openWallpaperUpload()">
+            <i class="bi bi-image"></i> Change Wallpaper
+            <input type="file" id="wallpaper-upload" accept="image/*" style="display: none;" onchange="changeWallpaper(event)">
+        </div>
+        
+        <div class="settings-item" onclick="resetWallpaper()">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset to Default
+        </div>
+        
+    </div>
+</div>
+
+
+
+<!-- About Submenu -->
+<div id="about-menu" class="settings-submenu">
+    <div class="settings-header">
+        <span>About Device</span>
+        <button class="close-btn" onclick="closeSubmenu('about-menu')">✖</button>
+    </div>
+    <div class="settings-list">
+        <div class="settings-item"><i class="bi bi-phone"></i> Model: Custom Phone UI</div>
+        <div class="settings-item"><i class="bi bi-cpu"></i> Processor: Virtual AI-Core</div>
+        <div class="settings-item"><i class="bi bi-memory"></i> RAM: 6TB</div>
+        <div class="settings-item"><i class="bi bi-hdd"></i> Storage: 128TB</div>
+        <div class="settings-item"><i class="bi bi-info-circle"></i> Version: 2.0.0</div>
+    </div>
+</div>
+
     
+    
+    
+    {% endblock %}
+
+    {%block script%}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    
-    let lastScrollTop = 0;
-const notificationCard = document.querySelector(".notification-card");
-const smallWindow = document.getElementById("small-window");
-
-// **Disable pull-to-refresh (for mobile)**
-document.addEventListener("touchmove", function (event) {
-    let isInsideSmallWindow = event.target.closest(".small-window"); // Check if inside small window
-    if (!isInsideSmallWindow) {
-        event.preventDefault(); // Prevent scrolling only outside the small window
-    }
-}, { passive: false });
-
-// **Scroll Detection (Laptop/Desktop)**
-window.addEventListener("scroll", function () {
-    let scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-    // Prevent triggering notification card if `.small-window` is open
-    if (smallWindow && smallWindow.style.display === "block") return;  
-
-    if (scrollTop > lastScrollTop + 20) { // Scroll down
-        notificationCard.classList.add("show");
-    } else if (scrollTop < lastScrollTop - 20) { // Scroll up
-        notificationCard.classList.remove("show");
-    }
-
-    lastScrollTop = scrollTop;
-}, { passive: true });
-
-// **Touch Detection (Mobile) - Prevent Notification Swipe in Small Window**
-let startY = 0;
-
-document.addEventListener("touchstart", (event) => {
-    startY = event.touches[0].clientY; // Get initial touch position
-}, { passive: true });
-
-document.addEventListener("touchend", (event) => {
-    let endY = event.changedTouches[0].clientY; // Get touch end position
-    let diffY = endY - startY;
-
-    // Prevent notification from appearing if `.small-window` is open
-    if (smallWindow && smallWindow.style.display === "block") return;  
-
-    if (diffY > 30) { // Swipe Down (Show Notification)
-        notificationCard.classList.add("show");
-    } else if (diffY < -30) { // Swipe Up (Hide Notification)
-        notificationCard.classList.remove("show");
-    }
-});
-
-// **Close Small Window Function (If needed)**
-function closeWindow() {
-    smallWindow.style.display = "none"; // Hide the small window
-}
-
-
-
-        const brightnessSlider = document.getElementById("brightness-slider");
-
-brightnessSlider.addEventListener("input", function() {
-    let brightness = this.value;
-    document.body.style.filter = `brightness(${brightness}%)`;
-});
-
-
-
-
-    function openWindow(type) {
-        let title = document.getElementById("window-title");
-        let content = document.getElementById("window-content");
-        
-        // Change title and content dynamically
-        if (type === "bio") {
-        title.innerText = "About Me";
-        content.innerHTML =  `
-            <div class="bio-header">
-                <h2>Pardeep Verma</h2>
-                <p>Software Developer & AI Enthusiast</p>
-            </div>
-            <div class="bio-info">
-                <p>📍 Panipat, India</p>
-                <p>📧 <a href="mailto:pardeep9896148@gmail.com">pardeep9896148@gmail.com</a></p>
-                <p>🌐 <a href="https://pardeep.tech" target="_blank">pardeep.tech</a></p>
-                <p>📞 <a href="tel:+918199023574">+91 81990 23574</a></p>
-            </div>
-            <div class="bio-section">
-                <h3>ABOUT</h3>
-                <p>Innovative and passionate Software Developer & AI Enthusiast with expertise in Python, Flask, AI/ML, and system automation. Skilled in backend development, database management, and AI model implementation.</p>
-            </div>
-            <div class="bio-section">
-                <h3>Technical Skills</h3>
-                <ul>
-                    <li><b>⚡ Programming Languages:</b>  Python, C, JavaScript</li>
-                    <li><b>⚡ Web Development:</b>  Flask, HTML, CSS, JavaScript, Three.js</li>
-                    <li><b>⚡ Databases:</b> MySQL, SQLAlchemy, phpMyAdmin</li>
-                    <li><b>⚡ AI & ML:</b>  TensorFlow, GPT API, AI-powered chatbots</li>
-                    <li><b>⚡ Automation:</b> Server configuration, web crawling, task automation</li>
-                    <li><b>⚡ Cloud & Storage:</b>Google Drive API, Heroku</li>
-                    <li><b>⚡ APIs:</b> GPT API, Gemini API, yt-dlp</li>
-                </ul>
-            </div>
-            <div class="bio-section">
-                <h3>Education</h3>
-                <p><b>BCA (2022 – 2025)</b> <br> Kurukshetra University, Panipat</p>
-                <p><b>Senior Secondary</b><br> HBSE (Govt. School, Panipat)</p>
-            </div>
-        `;
- } else if (type === "projects") {
-            title.innerText = "My Projects";
-            content.innerHTML = `
-                <div class="drawer-body">
-                    <div class="second-row">
-                        <a href="/dashboard" target="_blank" class="icon-container">
-                           <div class="todo"><i class="bi bi-journal-plus"></i></div>
-                            <span class="icon-label">To-Do</span>
-                        </a>
-                        <a href="https://form.clickearn.me" target="_blank" class="icon-container">
-                            <div class="forms"></div>
-                            <span class="icon-label">Forms</span>
-                        </a>
-                        <a href="https://stayhydrated.tech/" target="_blank" class="icon-container">
-                            <div class="stayhydrated"></div>
-                            <span class="icon-label">StayHydro</span>
-                        </a>
-                    </div>
-                    <div class="second-row">
-                        <a href="https://github.com/robindarkblack1" target="_blank" class="icon-container">
-                            <div class="icon1"><i class="bi bi-github"></i></div>
-                            <span class="icon-label">GitHub</span>
-                        </a>
-                        <a href="https://github.com/robindarkblack1" target="_blank" class="icon-container">
-                            <div class="icon1"><i class="bi bi-github"></i></div>
-                            <span class="icon-label">GitHub</span>
-                        </a>
-                        <a href="https://github.com/robindarkblack1" target="_blank" class="icon-container">
-                            <div class="icon1"><i class="bi bi-github"></i></div>
-                            <span class="icon-label">GitHub</span>
-                        </a>
-                    </div>
-                    <div class="second-row">
-                           <a href="/compilerc" target="_blank" class="icon-container">
-                            <div class="icon1"><i class="bi bi-github"></i></div>
-                            <span class="icon-label">compiler</span>
-                        </a>
-                        </div>
-                </div>
-            `;
-        } else if (type === "messages") {
-    title.innerText = "Messages";
-    content.innerHTML = `
-        <div class="message-container">
-            <div class="message">
-                <strong>📢 Github Repo Update :</strong> Just pushed some spicy code. Hope it doesn’t crash! 🚀
-            </div>
-            <div class="message">
-                <strong>👀 Someone Visited My Portfolio :</strong> Hey, you! Yeah, you! Thanks for stopping by. 🎉
-            </div>
-            <div class="message">
-                <strong>🤖 AI Takeover? :</strong> Still coding... Until AI does it for me. 🤯
-            </div>
-            <div class="message">
-                <strong>💡 Random Thought :</strong> Debugging is like being the detective in a crime movie... where you are also the murderer. 🔍
-            </div>
-            <div class="message">
-                <strong>🚀 Future Plans :</strong> More projects coming soon! Or maybe just coffee ☕.
-            </div>
-        </div>
-    `; 
-
-}
-else if (type === "activities") {
-    title.innerText = "Current Activities";
-    content.innerHTML = `
-        <div class="activity-card">
-            <h3>🚀 Building AI-Powered Chat App</h3>
-            <p>Enhancing real-time chat with an AI assistant using <strong>Gemini API</strong>. Now adding support for <strong>media uploads via Google Drive</strong>.</p>
-        </div>
-
-        <div class="activity-card">
-            <h3>📢 Freelancing Platform for College</h3>
-            <p>Developing a <strong>Flask-based freelancing site</strong> to help college students find and offer services. Currently implementing the payment system.</p>
-        </div>
-
-        <div class="activity-card">
-            <h3>🔍 Govt Job Notification Portal</h3>
-            <p>AI-powered job notification system that <strong>crawls govt websites</strong> and matches jobs based on user profiles. Next: Adding an extension for direct job applications.</p>
-        </div>
-
-        <div class="activity-card">
-            <h3>🛠️ Upcoming: AI-Powered Portfolio Assistant</h3>
-            <p>Planning an <strong>AI-driven portfolio website</strong> that dynamically updates based on user interactions and queries.</p>
-        </div>
-
-        <div class="activity-card">
-            <h3>🏆 Recent: AI-Based Health Monitor (Competition)</h3>
-            <p>Built an AI-powered personal health tracker in 72 hours for a hackathon. Integrated <strong>predictive analytics</strong> and <strong>real-time symptom analysis</strong>.</p>
-        </div>
-    `;
-}
-
-        
-        let windowDiv = document.getElementById("small-window");
-    windowDiv.style.display = "block";  // Ensure visibility first
-    setTimeout(() => {
-        windowDiv.classList.add("show");
-        windowDiv.classList.remove("hide");
-    }, 10);  // Small delay to allow reflow
-}
-
-function closeWindow() {
-    let windowDiv = document.getElementById("small-window");
-    windowDiv.classList.remove("show");
-    windowDiv.classList.add("hide");
-
-    setTimeout(() => {
-        windowDiv.style.display = "none";
-        windowDiv.classList.remove("hide");  // Reset for next open
-    }, 600); // Matches CSS transition duration
-}
-    </script>
-    
-</body>
-
-</html>
+    <script src="{{url_for( 'static' , filename='js/home.js' )}}"></script>
+    {%endblock%}

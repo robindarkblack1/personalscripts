@@ -1,0 +1,44 @@
+<nav class="navbar   mobile-nav" data-bs-theme="dark" >
+
+    <div class="notifications">
+        <time id="time">{{time}} <i class="bi bi-instagram ms-2"></i> <i class="bi bi-github ms-1"></i></time>
+
+    </div>
+
+    <div class="battery"><i class="bi bi-wifi me-1"></i> <i class="bi bi-reception-3 me-1"></i> <i
+            class="bi bi-reception-4 me-1"></i> <i class="bi bi-battery-half "></i></div>
+
+</nav>
+
+<div class="notification-card">
+    <div class="notification-item" onclick="openNotification('instagram')">
+        <i class="bi bi-instagram"></i>
+        <span>You are my new follower! 🎉</span>
+    </div>
+    <div class="notification-item" onclick="openBrowser('https://github.com/robindarkblack1')">
+        <i class="bi bi-github"></i>
+        <span>New GitHub Repo: AI Chatbot Project 🚀</span>
+    </div>
+    <div class="notification-item" onclick="openNotification('errors')">
+        <i class="bi bi-code-slash"></i>
+        <span>This site has some errors 😒</span>
+    </div>
+    <div class="notification-item" onclick="openNotification('feedback')">
+        <i class="bi bi-bell-fill"></i>
+        <span>Feedback from Adi, We got Army of Bugs.🤬</span>
+    </div>
+
+    <!-- Brightness Control -->
+    <div class="brightness-control">
+        <i class="bi bi-brightness-high"></i>
+        <input type="range" min="10" max="100" value="100" class="brightness-slider" id="brightness-slider">
+    </div>
+</div>
+
+<div id="iphone-notification" class="iphone-notification">
+    <div class="notif-icon"><i class="bi bi-bell-fill"></i></div>
+    <div class="notif-content">
+        <strong>Feedback</strong><br>
+        A new feedback has been received from Adi.
+    </div>
+</div>  

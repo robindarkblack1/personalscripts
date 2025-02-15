@@ -2,6 +2,46 @@ body{
     background-image: url("../img/vivobg.png");
 }
 
+/* Preloader Container */
+#preloader {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: black; /* Background color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensures it appears on top */
+}
+
+/* Loader Animation */
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.2);
+    border-top: 5px solid white; /* Color of the loader */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Loader Animation Effect */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Hide content until page is loaded */
+body {
+    overflow: hidden; /* Prevent scrolling while loading */
+}
+
+/* Once loaded, show content */
+.loaded body {
+    overflow: auto;
+}
+
+
+
 .mobile-nav{
     background: rgba(0, 0, 0, 0.3); /* Darker transparent effect */
     backdrop-filter: blur(12px); /* Slightly stronger blur */
@@ -32,7 +72,7 @@ body{
     border-radius: 0 0 20px 20px; /* Rounded Bottom Corners */
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
     transition: top 0.4s ease-in-out;
-    z-index: 9999;
+    z-index: 100;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -116,15 +156,15 @@ body{
     margin-right: 10px;
 }
 
-.home-screen{
+.home-screen {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    /* min-height: 200px; */
-
+    width: 100%;
     margin-right: 15px;
 }
 
+/* Time Display (Centered on Top) */
 .time {
     font-size: 35px;
     color: white;
@@ -132,61 +172,181 @@ body{
     flex-direction: column;
     align-items: center;
     text-align: center;
+    margin-bottom: min(15vh, 120px); /* Increases on large screens, decreases on small screens */
 }
 
 .small-text {
     font-size: 15px;
-    margin-top: -5px; /* Adjust as needed */
+    margin-top: -5px;
 }
 
+/* Icon Rows - Aligned with Equal Spacing */
+.second-row,
+.third-row,
+.fourth-row,
+.fifth-row,
+.bottom-icon {
+    display: flex;
+    justify-content: space-between; /* Distribute icons evenly */
+    align-items: center;
+    gap: 15px; /* Adjusted for better spacing */
+    width: 100%;
+    max-width: 360px; /* Slightly reduced for uniformity */
+    padding: 0 10px; /* Add padding for consistent alignment */
+    margin-bottom: 20px;
+}
 
-
-.second-row {
-    display: flex; /* Align icons in a row */
-    gap: 10px; /* Space between icons */
-    margin-left: 30px;
-    margin-bottom: 20px;
-    margin-top: 120px;
-}
-.third-row {
-    display: flex; /* Align icons in a row */
-    gap: 10px; /* Space between icons */
-    margin-left: 30px;
-    margin-bottom: 20px;
-}
-.fourth-row {
-    display: flex; /* Align icons in a row */
-    gap: 10px; /* Space between icons */
-    margin-left: 30px;
-    margin-bottom: 20px;
-}
+/* Last row should have a bottom margin */
 .fifth-row {
-    display: flex; /* Align icons in a row */
-    gap: 10px; /* Space between icons */
-    margin-left: 30px;
-    margin-bottom: 10vh;
+    margin-bottom: 8vh;
 }
 
-
+/* Icon Container */
 .icon-container {
     display: flex;
-    flex-direction: column; /* Stack icon and text */
-    align-items: center; /* Center content */
+    flex-direction: column;
+    align-items: center;
     text-align: center;
+    width: 70px; /* Standardized for all icons */
+}
+
+/* Icon Styling */
+.icon1,
+.bio,
+.app-drawer,
+.message-icon {
+    background-color: black;
+    height: 55px; /* Adjusted size for uniformity */
+    width: 55px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease-in-out;
 }
 
 .icon1 {
-    background-color: black;
-    height: 45px;
-    width: 50px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    height: 50px !important;
+    width: 50px !important;
 }
+
+.bio {
+    height: 55px !important;
+    width: 55px !important;
+}
+
+/* Responsive Sizing for Smaller Screens */
+@media (max-height: 700px) {
+    .icon1 {
+        height: 45px !important;
+        width: 45px !important;
+    }
+    
+    .bio {
+        height: 50px !important;
+        width: 50px !important;
+    }
+
+    .time {
+        margin-bottom: max(5vh, 30px); /* Further reduction on small screens */
+    }
+}
+/* Bio Icon */
 .bio {
     background-image: url("../img/a.jpg");
-    background-size: cover; 
+    background-size: cover;
+}
+
+/* Message Icon */
+.message-icon {
+    background-color: rgb(11, 118, 206);
+}
+
+.message-icon i {
+    font-size: 26px;
+    color: white;
+    margin-top: 5px;
+}
+
+/* App Drawer */
+.app-drawer {
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4);
+    box-shadow: 0px 4px 10px rgba(255, 154, 158, 0.5);
+    cursor: pointer;
+}
+
+/* App Drawer Icon */
+.app-drawer i {
+    font-size: 20px;
+    color: white;
+}
+
+/* New Settings Icon Style */
+.setting-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(145deg, #1a1a1a, #2c2c2c); /* Premium black effect */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 8px #101010, -4px -4px 8px #3a3a3a; /* Neumorphic effect */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Rotating Gear Icon */
+.setting-icon i {
+    font-size: 28px;
+    color: #ffffff;
+    animation: rotateGear 3s infinite linear;
+}
+/* Hover Effect */
+.icon-container:hover .setting-icon {
+    transform: scale(1.1);
+    box-shadow: 6px 6px 12px #101010, -6px -6px 12px #3a3a3a;
+}
+
+/* Smooth Gear Rotation */
+@keyframes rotateGear {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+/* Hover Effects */
+.icon-container:hover,
+.bio:hover,
+.app-drawer:hover,
+.message-icon:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+.icon1:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Icon Labels */
+.icon-label {
+    font-size: 11px;
+    color: white;
+    margin-top: 3px;
+}
+
+
+
+
+/* Common styles for all icons */
+.bio, .forms, .stayhydrated, .linkedin, .insta, .todo {
+    background-size: cover;
     height: 45px;
     width: 50px;
     border-radius: 15px;
@@ -195,53 +355,55 @@ body{
     align-items: center;
 }
 
-.forms{
-    background-image: url("../img/forms.png");
-    background-size: cover; 
-    height: 45px;
-    width: 50px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Unique background images */
+.bio {
+    background-image: url("../img/a.jpg");
 }
-.stayhydrated{
+
+.forms {
+    background-image: url("../img/forms.png");
+}
+
+.stayhydrated {
     background-image: url("../img/Icon.ico");
-    background-size: cover; 
-    height: 45px;
-    width: 50px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+
+.linkedin {
+    background-color: rgb(6, 17, 134);
+}
+
+.insta {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.todo {
+    background: linear-gradient(45deg, #4facfe, #00f2fe); /* Custom gradient for To-Do */
+    box-shadow: 0px 4px 10px rgba(0, 242, 254, 0.4); /* Optional glow */
+}
+
+/* Icon styles */
+.icon1 i, .linkedin i, .insta i, .todo i {
+    color: white;
 }
 
 .icon1 i {
-    font-size: 32px; /* Adjust icon size */
-    color: white; /* Change icon color */
-}
-.linkedin {
-    background-color: rgb(6, 17, 134);
-    background-size: cover; 
-    height: 45px;
-    width: 50px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-size: 32px;
 }
 
-.linkedin i {
-    font-size: 25px; /* Adjust icon size */
-    color: white; /* Change icon color */
+.linkedin i, .insta i {
+    font-size: 25px;
 }
 
+.todo i {
+    font-size: 20px;
+}
 
+/* Activity button styles */
 .activities {
     width: 50px;
     height: 45px;
-    background: linear-gradient(135deg, #1e1e1e, #3a3a3a); /* Dark glossy gradient */
-    border-radius: 12px; /* Rounded square */
+    background: linear-gradient(135deg, #1e1e1e, #3a3a3a);
+    border-radius: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -250,22 +412,18 @@ body{
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    margin-right: -180px;
-}
-
-.acti-lable{
-    margin-right: -180px;
 }
 
 
-/* Icon inside the button */
+
+/* Icon inside activities */
 .activities i {
     font-size: 22px;
     color: white;
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
-/* Subtle hover effect */
+/* Hover effects */
 .activities:hover {
     transform: scale(1.1);
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5);
@@ -274,7 +432,7 @@ body{
 
 .activities:hover i {
     transform: scale(1.2);
-    color: #ffcc00; /* Golden glow */
+    color: #ffcc00;
 }
 
 /* Inner glow effect */
@@ -296,6 +454,8 @@ body{
 }
 
 
+
+/* Activity card styles */
 .activity-card {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     backdrop-filter: blur(12px);
@@ -326,114 +486,343 @@ body{
 
 
 
-.insta {
-    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-    background-size: cover; 
-    height: 45px;
-    width: 50px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+
+/* Context Menu */
+.context-menu {
+    display: none;
+    position: absolute;
+    background: #333;
+    color: white;
+    border-radius: 5px;
+    padding: 8px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.context-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.context-menu li {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.context-menu li:hover {
+    background: #444;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content {
+    text-align: center;
+}
+
+.modal button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 
-.insta i {
-    font-size: 25px; /* Adjust icon size */
-    color: white; /* Change icon color */
-}
-.todo {
-    background: linear-gradient(45deg, #4facfe, #00f2fe); /* Custom gradient for To-Do */
-    height: 45px;
-    width: 50px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 10px rgba(0, 242, 254, 0.4); /* Optional glow */
-}
 
-.todo i {
-    font-size: 20px; /* Adjust icon size */
-    color: white; /* Make sure icon is visible */
-}
 
-.message-icon {
-    background-color: rgb(11, 118, 206);
-    height: 45px;
-    width: 50px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.message-icon i {
-    margin-top: 5px;
-    font-size: 28px; /* Adjust icon size */
-    color: white; /* Change icon color */
-}
 
-.message-container {
+.settings, .settings-submenu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 60%;
+    background: var(--bg-color);
+    color: var(--text-color);
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
+    padding: 20px;
+    z-index: 1000;
+    border-radius: 15px;
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 0;
+    transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+    display: none;
 }
 
-.message {
-    background: linear-gradient(135deg, #2193b0, #7cbac8);
-    color: white;
-    padding: 12px 15px;
-    border-radius: 10px;
-    font-size: 14px;
-    /* font-weight: bold; */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out;
+/* Show Animation */
+.settings.show, .settings-submenu.show {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
 }
 
-.message:hover {
+/* Header styling */
+.settings-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.5rem;
+}
+
+/* Close button (no extra hover bg) */
+.settings-header .close-btn {
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-color);
+}
+
+.settings-header .close-btn:hover {
+    transform: rotate(90deg);
+}
+
+/* Settings List */
+.settings-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.settings-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.settings-item i {
+    font-size: 1.5rem;
+    margin-right: 12px;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #111;
+        --text-color: #fff;
+    }
+}
+
+/* Light Mode */
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg-color: #fff;
+        --text-color: #000;
+    }
+}
+
+
+
+
+/* Light Mode Default */
+.settings-card {
+    background: #fff !important;
+    color: #000 !important;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode */
+.settings-card.dark-mode {
+    background: #111 !important;
+    color: #fff !important;
+}
+
+
+
+/* Light Mode Default */
+.settings-submenu {
+    background: #fff !important;
+    color: #000 !important;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode for All Settings Cards */
+.dark-mode .settings-submenu {
+    background: #111 !important;
+    color: #fff !important;
+}
+
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.settings-item i {
+    font-size: 22px;
+    color: #007bff;
+}
+
+.settings-item:hover {
+    background: #f0f0f0;
     transform: scale(1.05);
 }
 
 
-.icon-label {
-    font-size: 12px;
-    color: white;
-    margin-top: 3px;
+
+.app-details {
+    display: none;
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    width: 300px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease-in-out;
 }
 
-.app-drawer {
-    background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); /* Soft pink-orange gradient */
-    height: 50px;
-    width: 50px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 10px rgba(255, 154, 158, 0.5); /* Glow effect */
+.app-info {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.app-info p {
+    margin: 5px 0;
+}
+
+.app-submenu {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    width: 300px;
+    height: 300px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    top: 50px; /* Default position */
+    left: 50px; /* Default position */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Show submenu */
+.app-submenu.visible {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* While dragging */
+.app-submenu:active {
+    cursor: grabbing;
+}
+
+
+button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    background: #007bff;
+    color: white;
     cursor: pointer;
-    transition: transform 0.2s ease-in-out;
+    border-radius: 20px;
+    margin-top: 10px;
+
 }
 
-.app-drawer:hover {
-    transform: scale(1.1); /* Slight zoom on hover */
-}
-
-.app-drawer i {
-    font-size: 22px;
-    color: white;
+button:disabled {
+    background: grey;
+    cursor: not-allowed;
 }
 
 
 
 
-.bottom-icon {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 icons per row */
-    gap: 10px; /* Space between icons */
-    justify-content: center;
-}/* Small Window: Fixed Size & Scrollable */
+
+
+
+
+
+
+
+
+
+/* Dark Mode */
+.dark-mode .settings-submenu,
+.dark-mode .app-details {
+    background: #222;
+    color: #fff;
+}
+
+.dark-mode .settings-item i {
+    color: #ffcc00;
+}
+
+.dark-mode .settings-item:hover {
+    background: #333;
+}
+
+
+
+/* Hide default select styles */
+select {
+    font-size: 1.2rem;
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Settings Item Button */
+
+
+button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Remove Close Button Background */
+.settings-header .close-btn {
+    background: none !important;
+}
+
+/* Prevent Unwanted Hover Background */
+.settings-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+
+
+
+
+
+
+
 /* Small Window: Fixed Size & Scrollable */
 
 .small-window {
@@ -447,7 +836,7 @@ body{
     padding:20px;
     border-radius: 15px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    z-index: 101;
     opacity: 0;
     transition: top 0.6s ease, opacity 0.3s ease;
     overflow-y: auto;  /* Enables smooth scrolling */
@@ -572,29 +961,257 @@ body{
     color: red;
 }
 
-.drawer-body{
+
+.drawer-body {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    /* min-height: 200px; */
     margin-right: 15px;
+    padding: 10px;
 }
-.drawer-body .second-row{
 
-        display: flex; /* Align icons in a row */
-        gap: 10px; /* Space between icons */
-        margin-left: 10px;
-        margin-bottom: 20px;
-        margin-top: 10px;
-    }
-.drawer-body .icon-label{
-    color: white;
+/* Icon Rows - Ensuring 3 Icons per Row */
+.drawer-body .second-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Always 3 icons per row */
+    gap: 15px; /* Space between icons */
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
 }
-.drawer-body .icon-container{
-    margin-right: 50px;
+
+/* Icon Container - Keeping Uniform Size */
+.drawer-body .icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Icon Labels */
+.drawer-body .icon-label {
+    color: white;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .drawer-body {
+        margin-right: 5px;
+        padding: 5px;
+    }
+
+    .drawer-body .second-row {
+        gap: 12px; /* Slightly reduce spacing for small screens */
+        margin-bottom: 15px;
+    }
+
+    .drawer-body .icon-label {
+        font-size: 10px; /* Adjust label size */
+    }
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+.message {
+    background: linear-gradient(135deg, #2193b0, #7cbac8);
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    /* font-weight: bold; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.message:hover {
+    transform: scale(1.05);
 }
 
 a{
     text-decoration: none;
 }
 
+
+
+
+
+
+
+
+
+
+/* Full-screen browser card */
+#browser-card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000; /* Black background for a clean UI */
+    display: none; /* Hidden by default */
+    z-index: 9999;
+}
+
+/* Header with close button */
+.browser-header {
+    position: absolute;
+    top: 5px; /* Move it up */
+    right: 10px; /* Align to right */
+    width: auto; /* Prevent full width issue */
+    display: flex;
+    justify-content: flex-end; /* Align close button to the right */
+    z-index: 10000; /* Ensure it's above iframe */
+}
+
+/* Close button styling */
+.close-btn {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 22px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10001; /* Ensure button is clickable */
+    position: relative; /* Make it interactable */
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Fullscreen iframe */
+#browser-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Loader animation */
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top: 5px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+/* Keyframe for spinning loader */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+
+
+
+.iphone-notification {
+    position: fixed;
+    top: -80px; /* Initially hidden */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 15px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: sans-serif;
+    font-size: 14px;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.notif-icon {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.iphone-notification.show {
+    top: 20px; /* Moves into view */
+    opacity: 1;
+}
+
+.iphone-notification.hide {
+    top: -80px; /* Moves out */
+    opacity: 0;
+}
+
+
+/* Custom Notification Styling */
+.custom-notification {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30, 30, 30, 0.95);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 280px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    z-index: 102;
+}
+
+/* Show animation */
+.custom-notification.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+/* Notification Icon */
+.notification-icon {
+    font-size: 20px;
+    background: white;
+    color: black;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+/* Notification Content */
+.notification-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.notification-message {
+    font-size: 14px;
+    margin: 5px 0 0;
+}
+
+/* Hide animation */
+.custom-notification:not(.show) {
+    transform: translateX(-50%) translateY(-20px);
+    opacity: 0;
+}
