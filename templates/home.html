@@ -34,13 +34,32 @@
     </div>
     
     <div class="second-row">
-        <a href="/dashboard" target="_blank" class="icon-container" data-app="todo" oncontextmenu="showContextMenu(event, 'todo')">
+        <!-- <div class="icon-container" onclick="openDirectBrowser('/dashboard')" data-app="todo" oncontextmenu="showContextMenu(event, 'todo')"> -->
+        <a href="/dashboard"  class="icon-container" data-app="todo"  oncontextmenu="showContextMenu(event, 'todo')">
             <div class="todo"><i class="bi bi-journal-plus"></i></div>
             <span class="icon-label">Todo</span>
         </a>
+
+        <a href="https://chat.clickearn.me" target="_blank" class="icon-container chat-icon" data-app="chat" oncontextmenu="showContextMenu(event, 'chat')">
+            <div class="chat-icon-wrapper">
+                <i class="bi bi-chat-dots"></i>
+            </div>
+            <span class="icon-label">Chat</span>
+        </a>
+        <a href="https://clickearn.me/Youtube-video-download" target="_blank" class="icon-container downloader-icon" data-app="downloader" oncontextmenu="showContextMenu(event, 'downloader')">
+            <div class="video-downloader-icon-wrapper">
+                <i class="bi bi-cloud-arrow-down"></i>
+            </div>
+            <span class="icon-label">Downloader</span>
+        </a>
+        
+        
+        
+        
     </div>
     
     <div class="third-row">
+        <!-- <div class="icon-container" onclick="openInstagram('https://www.instagram.com/bannned_devil/')" data-app="instagram" oncontextmenu="showContextMenu(event, 'instagram')"> -->
         <a href="https://www.instagram.com/bannned_devil/" target="_blank" class="icon-container" data-app="instagram" oncontextmenu="showContextMenu(event, 'instagram')">
             <div class="insta"><i class="bi bi-instagram"></i></div>
             <span class="icon-label">Instagram</span>
@@ -52,6 +71,13 @@
             <div class="linkedin"><i class="bi bi-linkedin"></i></div>
             <span class="icon-label">LinkedIn</span>
         </a>
+        <div class="icon-container" onclick="openBrowser('https://clickearn.me/admin')" data-app="admin" oncontextmenu="showContextMenu(event, 'admin')">
+            <div id="admin-icon-wrapper">
+                <i class="bi bi-shield-lock"></i>
+            </div>
+            <span class="icon-label">Admin</span>
+        </div>
+        
     </div>
     
     <div class="fifth-row">
@@ -118,7 +144,7 @@
         </div>
         <div class="loader" id="browser-loader"></div>
         <iframe id="browser-frame" src="" frameborder="0" onload="hideLoader()"></iframe>
-        
+    
     </div>
 
 
@@ -149,7 +175,7 @@
 <div id="security-menu" class="settings-submenu">
     <div class="settings-header">
         <span>Security</span>
-        <button class="close-btn" onclick="closeSubmenu('security-menu')">✖</button>
+        <button class="close-btn" onclick="closeSubmenu('security-menu')">→</button>
     </div>
     <div class="settings-list">
         <input type="password" id="pin-input" placeholder="Set PIN" class="settings-item" />
@@ -194,6 +220,9 @@
         </div>
         <div class="settings-item" onclick="showAppMenu('activities-menu')">
             <i class="bi bi-activity"></i> Activities
+        </div>
+        <div class="settings-item" onclick="showAppMenu('chat-menu')">
+            <i class="bi bi-activity"></i> Chat
         </div>
     </div>
 </div>
@@ -260,6 +289,18 @@
         <p><strong>Developer:</strong> Pardeep</p>
         <p>Track and manage your daily activities.</p>
         <button id="activities-btn" onclick="toggleButton('activities-btn')">Enable</button>
+    </div>
+</div>
+<div id="chat-menu" class="settings-submenu app-submenu">
+    <div class="settings-header">
+        <span>Click Chat</span>
+        <button class="close-btn" onclick="hideAppMenu('chat-menu')">✖</button>
+    </div>
+    <div class="app-info">
+        <p><strong>Version:</strong> 1.0</p>
+        <p><strong>Developer:</strong> Pardeep</p>
+        <p>Track and manage your daily activities.</p>
+        <button id="chat-btn" onclick="toggleButton('chat-btn')">Enable</button>
     </div>
 </div>
 

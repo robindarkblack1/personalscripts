@@ -1,4 +1,4 @@
-from flask import Flask, render_template,jsonify,request,Response
+from flask import Flask, render_template,jsonify,request,Response,make_response
 from util.db import db, User , Webpage
 from config import config
 from flask_login import LoginManager
@@ -65,7 +65,7 @@ def create_app():
     CACHE = {}
 
     @app.route('/proxy')
-    def proxy():
+    def custom_proxy():
         url = request.args.get('url')
         if not url:
             return "URL parameter is required", 400
@@ -76,22 +76,37 @@ def create_app():
                 return CACHE[url]
 
             headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.0.0 Safari/537.36"
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.0.0 Safari/537.36",
+                "Referer": url  # Helps in bypassing anti-embedding checks
             }
             response = requests.get(url, headers=headers, allow_redirects=True, timeout=TIMEOUT)
 
             # Get content type
             content_type = response.headers.get("Content-Type", "")
 
-            # Process HTML pages to rewrite URLs
             if "text/html" in content_type:
                 soup = BeautifulSoup(response.text, "html.parser")
 
-                for tag in soup.find_all(["a", "link", "script", "img"]):
+                # Modify all links and scripts to load through the proxy
+                for tag in soup.find_all(["a", "link", "script", "img", "iframe"]):
                     if tag.has_attr("href"):
                         tag["href"] = f"/proxy?url={urljoin(url, tag['href'])}"
                     if tag.has_attr("src"):
                         tag["src"] = f"/proxy?url={urljoin(url, tag['src'])}"
+
+                # Inject a script to bypass embedding restrictions
+                bypass_script = """
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            console.log("🔄 Removing X-Frame-Options and CSP restrictions...");
+                            let meta = document.createElement('meta');
+                            meta.httpEquiv = 'Content-Security-Policy';
+                            meta.content = "frame-ancestors 'self' *";
+                            document.head.appendChild(meta);
+                        });
+                    </script>
+                """
+                soup.body.insert_before(BeautifulSoup(bypass_script, "html.parser"))
 
                 modified_html = str(soup)
                 CACHE[url] = Response(modified_html, content_type="text/html")
@@ -105,9 +120,17 @@ def create_app():
             return "Request timed out", 504
         except requests.exceptions.RequestException as e:
             return f"Error fetching page: {str(e)}", 500
+    @app.route("/iframe-proxy/<path:url>")
+    def iframe_proxy(url):
+            target_url = f"https://chat.clickearn.me/{url}"
+            headers = {key: value for key, value in request.headers if key != "Host"}
+            response = requests.get(target_url, headers=headers)
+            return Response(response.content, status=response.status_code, headers=dict(response.headers))
 
+
+    
+    
     return app
-
 
 def run_app():
     """Runs the Flask app with logging and database setup."""

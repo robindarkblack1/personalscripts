@@ -71,19 +71,24 @@ function restoreApps() {
 
 
 function toggleSettings() {
-    const settings = document.getElementById("settings-card");
-    if (settings.classList.contains("show")) {
-        settings.classList.remove("show");
+    const settingsMenu = document.getElementById("settings-card");
+
+    if (settingsMenu.classList.contains("show")) {
+        // Close Animation (Shrink Back)
+        settingsMenu.classList.remove("show");
         setTimeout(() => {
-            settings.style.display = "none";
-        }, 400);
+            settingsMenu.style.display = "none";
+        }, 400); // Matches transition timing
     } else {
-        settings.style.display = "flex";
-        setTimeout(() => {
-            settings.classList.add("show");
-        }, 10);
+        // Ensure Display Before Animation Starts
+        settingsMenu.style.display = "flex";
+        requestAnimationFrame(() => {
+            settingsMenu.classList.add("show");
+        });
     }
 }
+
+
 
 // Open specific submenu
 function openSubmenu(menuId) {
@@ -94,13 +99,26 @@ function openSubmenu(menuId) {
     }, 10);
 }
 
-// Close submenu
+// Close submenu with animation
 function closeSubmenu(menuId) {
     const menu = document.getElementById(menuId);
-    menu.classList.remove("show");
-    setTimeout(() => {
-        menu.style.display = "none";
-    }, 400);
+    const button = document.querySelector('.close-btn .arrow');
+
+    if (menu.classList.contains("show")) {
+        // Animate closing
+        menu.classList.remove("show");
+        button.innerHTML = "→"; // Change to forward arrow
+        setTimeout(() => {
+            menu.style.display = "none";
+        }, 400); // Match animation duration
+    } else {
+        // Animate opening
+        menu.style.display = "block";
+        setTimeout(() => {
+            menu.classList.add("show");
+            button.innerHTML = "←"; // Change to back arrow
+        }, 10); // Short delay for smoother effect
+    }
 }
 
 
@@ -497,7 +515,7 @@ function openNotification(type) {
         case 'github':
             title = "GitHub";
             message = "Opening GitHub... 🛠️";
-            url = "https://github.com";
+            url = "https://github.com/robindarkblack1";
             break;
         case 'errors':
             title = "Site Errors";
@@ -621,26 +639,109 @@ function openBrowser(url) {
     let browserLoader = document.getElementById("browser-loader");
     let browserCard = document.getElementById("browser-card");
 
-    // Show loader and display browser card
+    console.log("🔄 Attempting to open URL:", url);
+
+    // Show loader
     browserLoader.style.display = "block";
+
+    // Set display to block first, then trigger animation
     browserCard.style.display = "block";
+    setTimeout(() => {
+        browserCard.classList.add("active"); // Apply animation
+    }, 10);
 
     // Load website through Flask proxy
     browserFrame.src = `/proxy?url=${encodeURIComponent(url)}`;
 
-    // Hide loader when page loads
-    browserFrame.onload = function() {
+    // Debug iframe load success
+    browserFrame.onload = function () {
         browserLoader.style.display = "none";
+        console.log("✅ Iframe loaded successfully:", browserFrame.src);
     };
 
-    // Handle iframe errors
-    browserFrame.onerror = function() {
+    // Debug iframe errors
+    browserFrame.onerror = function () {
         browserLoader.style.display = "none";
-        console.log("Error loading iframe:", browserFrame.src);
+        console.error("❌ Error loading iframe:", browserFrame.src);
     };
 }
 
+
+function openInstagram(url) {
+    let browserFrame = document.getElementById("browser-frame");
+    let browserLoader = document.getElementById("browser-loader");
+    let browserCard = document.getElementById("browser-card");
+
+    console.log("🔄 Attempting to open Instagram:", url);
+
+    // Show loader
+    browserLoader.style.display = "block";
+
+    // Set display to block first, then trigger animation
+    browserCard.style.display = "block";
+    setTimeout(() => {
+        browserCard.classList.add("active"); // Apply animation
+    }, 10);
+
+    // Load Instagram through proxy
+    browserFrame.src = `/instagram-proxy?url=${encodeURIComponent(url)}`;
+
+    // Debug iframe load success
+    browserFrame.onload = function () {
+        browserLoader.style.display = "none";
+        console.log("✅ Instagram loaded successfully:", browserFrame.src);
+    };
+
+    // Debug iframe errors
+    browserFrame.onerror = function () {
+        browserLoader.style.display = "none";
+        console.error("❌ Error loading Instagram:", browserFrame.src);
+    };
+}
+
+
+
+function openDirectBrowser(url) {
+    let browserFrame = document.getElementById("browser-frame");
+    let browserLoader = document.getElementById("browser-loader");
+    let browserCard = document.getElementById("browser-card");
+
+    if (!browserFrame || !browserLoader || !browserCard) {
+        console.error("Required elements not found!");
+        return;
+    }
+
+    // Show loader & open browser card smoothly
+    browserLoader.style.display = "block";
+    browserCard.style.display = "block";
+    browserCard.classList.add("active");
+
+    // Directly load the website
+    browserFrame.src = url;
+
+    // Hide loader when the iframe loads successfully
+    browserFrame.onload = () => {
+        browserLoader.style.display = "none";
+    };
+
+    // Handle iframe errors properly
+    browserFrame.onerror = () => {
+        browserLoader.style.display = "none";
+        console.error("Error loading website:", url);
+    };
+}
+
+
+
 function closeBrowser() {
-    document.getElementById("browser-card").style.display = "none";
-    document.getElementById("browser-frame").src = "";
+    let browserCard = document.getElementById("browser-card");
+
+    // Remove animation class
+    browserCard.classList.remove("active");
+
+    // Wait for animation to finish before hiding
+    setTimeout(() => {
+        browserCard.style.display = "none";
+        document.getElementById("browser-frame").src = ""; // Clear iframe for fresh load
+    }, 300); // Matches CSS transition duration
 }

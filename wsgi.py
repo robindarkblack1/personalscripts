@@ -1,4 +1,3 @@
-from app import app  # Change 'app' if your main file has a different name
+from app import create_app  # Assuming your main script is named 'main_script.py'
 
-if __name__ == "__main__":
-    app.run()
+app = create_app()
