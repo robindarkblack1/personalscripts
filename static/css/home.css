@@ -459,6 +459,270 @@ body {
 
 
 
+
+
+/* Feedback Icon */
+#feedback-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+#feedback-icon-wrapper:hover {
+    transform: scale(1.1);
+}
+
+#feedback-logo {
+    font-size: 28px;
+    color: white;
+}
+
+.icon-container {
+    text-align: center;
+    cursor: pointer;
+}
+
+.icon-label {
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #fff;
+}
+
+/* Feedback Card */
+#feedback-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Card Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -55%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Header */
+.feedback-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ff758c;
+    padding: 12px 16px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Close Button */
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Feedback Content */
+.feedback-content {
+    padding: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Feedback Item */
+.feedback-item {
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-name {
+    font-weight: bold;
+    color: #ff758c;
+}
+
+.feedback-text {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Show/Hide Classes */
+.hidden {
+    display: none;
+}
+
+
+
+
+
+
+/* Feedback Icon */
+#feedback-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 55px;
+    height: 50px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+#feedback-icon-wrapper:hover {
+    transform: scale(1.1);
+}
+
+#feedback-logo {
+    font-size: 28px;
+    color: white;
+}
+
+.icon-container {
+    text-align: center;
+    cursor: pointer;
+}
+
+.icon-label {
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #fff;
+}
+
+/* Feedback Card */
+/* Feedback Card */
+#feedback-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+    max-height: 90vh; /* Set a max-height relative to viewport */
+    overflow-y: auto; /* Enable vertical scrolling */
+    z-index: 1000; /* Ensure the card is above other elements */
+}
+
+/* Card Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -55%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Header */
+.feedback-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ff758c;
+    padding: 12px 16px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Close Button */
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    transform: scale(1.2);
+}
+
+.feedback-content {
+    padding: 15px;
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Prevent body from scrolling */
+body.no-scroll {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Feedback Item */
+.feedback-item {
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure default events don't prevent scrolling */
+#feedback-card {
+    touch-action: auto; /* Enable touch scrolling on touch devices */
+}
+
+
+.user-name {
+    font-weight: bold;
+    color: #ff758c;
+}
+
+.feedback-text {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Show/Hide Classes */
+.hidden {
+    display: none;
+}
+
+
+
+
+
+
+
 /* Common styles for all icons */
 .bio, .forms, .stayhydrated, .linkedin, .insta, .todo, .chat-icon-wrapper,.video-downloader-icon-wrapper {
     background-size: cover;

@@ -429,14 +429,17 @@ function restoreAppStates() {
 let lastScrollTop = 0;
 const notificationCard = document.querySelector(".notification-card");
 const smallWindow = document.getElementById("small-window");
+const Feedbackcard = document.getElementById("feedback-card");
 
-// **Disable pull-to-refresh (for mobile)**
+
 document.addEventListener("touchmove", function (event) {
-let isInsideSmallWindow = event.target.closest(".small-window"); // Check if inside small window
-if (!isInsideSmallWindow) {
-    event.preventDefault(); // Prevent scrolling only outside the small window
-}
+    let isInsideSmallWindow = event.target.closest(".small-window"); // Check if inside small window
+    let isInsideFeedbackCard = event.target.closest("#feedback-card"); // Check if inside feedback card
+    if (!isInsideSmallWindow && !isInsideFeedbackCard) {
+        event.preventDefault(); // Prevent scrolling only outside the small window and feedback card
+    }
 }, { passive: false });
+
 
 // **Scroll Detection (Laptop/Desktop)**
 window.addEventListener("scroll", function () {
@@ -444,6 +447,7 @@ let scrollTop = window.scrollY || document.documentElement.scrollTop;
 
 // Prevent triggering notification card if `.small-window` is open
 if (smallWindow && smallWindow.style.display === "block") return;  
+if (Feedbackcard && Feedbackcard.style.display === "block") return;  
 
 if (scrollTop > lastScrollTop + 20) { // Scroll down
     notificationCard.classList.add("show");
@@ -467,6 +471,7 @@ let diffY = endY - startY;
 
 // Prevent notification from appearing if `.small-window` is open
 if (smallWindow && smallWindow.style.display === "block") return;  
+if (Feedbackcard && Feedbackcard.style.display === "block") return;  
 
 if (diffY > 30) { // Swipe Down (Show Notification)
     notificationCard.classList.add("show");
@@ -567,6 +572,20 @@ function showNotification(title, message, url = "") {
     }, 10000);
 }
 
+
+function openFeedback() {
+    let feedbackCard = document.getElementById('feedback-card');
+
+    feedbackCard.style.display = 'block';
+    document.body.classList.add('no-scroll');
+}
+
+function closeFeedback() {
+    let feedbackCard = document.getElementById('feedback-card');
+
+    feedbackCard.style.display = 'none';
+    document.body.classList.remove('no-scroll');
+}
 
 
 

@@ -71,6 +71,15 @@
             <div class="linkedin"><i class="bi bi-linkedin"></i></div>
             <span class="icon-label">LinkedIn</span>
         </a>
+        <div class="icon-container" onclick="openFeedback()" data-app="feedback" oncontextmenu="showContextMenu(event, 'feedback')">
+            <div id="feedback-icon-wrapper">
+                <div id="feedback-logo">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+            </div>
+            <span class="icon-label">Feedback</span>
+        </div>
+        
         <div class="icon-container" onclick="openBrowser('https://clickearn.me/admin')" data-app="admin" oncontextmenu="showContextMenu(event, 'admin')">
             <div id="admin-icon-wrapper">
                 <i class="bi bi-shield-lock"></i>
@@ -147,6 +156,38 @@
     
     </div>
 
+
+
+
+<!-- Feedback Card -->
+<div id="feedback-card" class="hidden">
+    <div class="feedback-header">
+        <h3>User Feedback</h3>
+        <button class="close-btn" onclick="closeFeedback()">&times;</button>
+    </div>
+    <div class="feedback-content">
+        <div class="feedback-item">
+            <span class="user-name">Manish Thakur</span>
+            <p class="feedback-text">
+                <strong>Creativity:</strong> 10/10<br>
+                <strong>Design:</strong> 6/10<br>
+                <strong>User Experience:</strong> 7/10<br>
+                <strong>Suggestion:</strong><br>
+                1) Try karo jab apps (Instagram, LinkedIn, etc.) pe click kare to new tabs me open na ho, jaise hum apne mobile phone me LinkedIn or Instagram open karte h waise hi UI/UX ho.<br>
+                2) Screen khali-khali sa h or sare elements align nhi h, so try to fix it!<br>
+                <strong>Important:</strong> Ye sirf mera opinion h!
+            </p>
+        </div>
+        <div class="feedback-item">
+            <span class="user-name">Karakoti</span>
+            <p class="feedback-text">Creative lol</p>
+        </div>
+        <div class="feedback-item">
+            <span class="user-name">Abi</span>
+            <p class="feedback-text">Bro you got some skill, just you need a designer.</p>
+        </div>
+    </div>
+</div>
 
 
 <!-- Settings Card -->
