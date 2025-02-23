@@ -329,6 +329,77 @@ body {
 
 
 
+
+/* AI Roaster - Fire theme */
+.airoaster {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(145deg, #ff4500, #ff6a00); /* Fiery orange gradient */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 8px #101010, -4px -4px 8px #3a3a3a; /* Neumorphic effect */
+    transition: all 0.3s ease-in-out;
+    color: white;
+}
+
+.airoaster:hover {
+    transform: scale(1.1);
+    box-shadow: 6px 6px 12px #0a0a0a, -6px -6px 12px #404040;
+    background: linear-gradient(145deg, #ff6a00, #ff4500);
+}
+
+/* AI Dream - Starry theme */
+.aidream {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(145deg, #6a11cb, #2575fc); /* Deep blue/purple dream effect */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 8px #101010, -4px -4px 8px #3a3a3a;
+    transition: all 0.3s ease-in-out;
+    color: white;
+}
+
+.aidream:hover {
+    transform: scale(1.1);
+    box-shadow: 6px 6px 12px #0a0a0a, -6px -6px 12px #404040;
+    background: linear-gradient(145deg, #2575fc, #6a11cb);
+}
+
+/* AI Resume - Document theme */
+.airesume {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(145deg, #2c3e50, #4ca1af); /* Professional blue/grey gradient */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 8px #101010, -4px -4px 8px #3a3a3a;
+    transition: all 0.3s ease-in-out;
+    color: white;
+}
+
+.airesume:hover {
+    transform: scale(1.1);
+    box-shadow: 6px 6px 12px #0a0a0a, -6px -6px 12px #404040;
+    background: linear-gradient(145deg, #4ca1af, #2c3e50);
+}
+
+/* Icon styles */
+.airoaster i, .aidream i, .airesume i {
+    font-size: 24px;
+}
+
+
+
+
+
+
 /* Hover Effects */
 .icon-container:hover,
 .bio:hover,
