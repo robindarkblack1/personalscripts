@@ -134,7 +134,6 @@ def create_app():
 
 def run_app():
     """Runs the Flask app with logging and database setup."""
-    setup_logging()
     app = create_app()
 
     if os.path.exists(STOP_FLAG):

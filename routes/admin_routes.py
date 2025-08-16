@@ -45,18 +45,18 @@ def admin():
                 session['name'] = admin.name
                 session['role'] = admin.role
                 if admin.role != 'user':
-                    log_activity(f'{admin.email} logged in as {admin.role}' )
+                    # log_activity(f'{admin.email} logged in as {admin.role}' )
                     return redirect('/admin_dashboard')
                 else:
-                    log_activity(f'{admin.email} tried to login {admin.role}' )
+                    # log_activity(f'{admin.email} tried to login {admin.role}' )
                     flash('You do not have admin privileges.', 'error')
                     return redirect('/')
             else:
                 flash('Invalid login credentials. Please try again.', 'error')
-                error = 'Invalid login credentials. Please try again.'
+                # error = 'Invalid login credentials. Please try again.'
         else:
-            error = 'Enter both email and password to login.'
-        return render_template('admin/login.html', error=error)
+            # error = 'Enter both email and password to login.'
+         return render_template('admin/login.html')
 
     # Render login page for GET request
     return render_template('admin/login.html')
@@ -81,7 +81,7 @@ def show_records():
   if session.get('role') in ['admin', 'editor','viewer']:  # Additional check for admin access
     records = UserInfo.query.all()  # Fetch all user records
     user = UserInfo.query.filter_by(email=session.get('email')).first()
-    log_activity(f'{session.get('email')} viewed records' )
+    # log_activity(f'{session.get('email')} viewed records' )
     return render_template("admin/records.html", records=records , user=user)
   return redirect('/admin')  # Redirect to admin login if not admin
 
@@ -91,7 +91,7 @@ def delete(sno):
         user = UserInfo.query.get(sno)
         db.session.delete(user)
         db.session.commit()
-        log_activity(f'{session.get('email')} deleted {user.email}' )
+        # log_activity(f'{session.get('email')} deleted {user.email}' )
         flash('User deleted successfully!', 'success')
         return redirect('/admin/records')
     
@@ -104,7 +104,7 @@ def update(sno):
             user.email = request.form['email']
             user.password = request.form['password']
             db.session.commit()
-            log_activity(f'{session.get('email')} updated {user.email}' )
+            # log_activity(f'{session.get('email')} updated {user.email}' )
             flash('User updated successfully!', 'success')
             return redirect('/admin/records')
         user = UserInfo.query.get(sno)
@@ -132,7 +132,7 @@ def add_user():
             # Add the user to the database
             db.session.add(new_user)
             db.session.commit()
-            log_activity(f'{session.get('email')} added {email}' )
+            # log_activity(f'{session.get('email')} added {email}' )
             flash('User added successfully!', 'success')
             return redirect(url_for('show_records'))
         except IntegrityError as e:
@@ -149,7 +149,7 @@ def add_user():
 
 @admin_routes.route('/logout_admin')
 def logout():
-    log_activity(f'{session.get('email')} logged out' )
+    # log_activity(f'{session.get('email')} logged out' )
     session.pop('email', None)
     return redirect('/admin')
 
@@ -173,7 +173,7 @@ def update_cookies():
 
         # Save the new cookies file
         file.save(COOKIES_FILE_PATH)
-        log_activity(f'{session.get('email')} updated cookies' )
+        # log_activity(f'{session.get('email')} updated cookies' )
         flash("Cookies updated successfully!", "success")
         return redirect(url_for('admin_routes.update_cookies'))
 
