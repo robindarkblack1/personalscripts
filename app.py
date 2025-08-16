@@ -45,18 +45,18 @@ def create_app():
         ist = pytz.timezone('Asia/Kolkata')
         current_time = datetime.now(ist).strftime('%I:%M %p').lstrip("0")
         formatted_date = datetime.now(ist).strftime('%a, %b %d %p')
-        api_key = 'cea78d1d78e04732a47112844250902'  # Your WeatherAPI key
+        api_key = app.config.get('WEATHER_API_KEY')
         location = 'Panipat,Haryana'
         api_url = f'http://api.weatherapi.com/v1/current.json?key={api_key}&q={location}&aqi=no'
 
-        # try:
-        #     response = requests.get(api_url)
-        #     weather_data = response.json()
-        #     temperature_c = weather_data['current']['temp_c']
-        # except Exception as e:
-        #     temperature_c = 'N/A'
-        #     print(f"Error fetching weather data: {e}")
-        temperature_c = 4
+        try:
+            response = requests.get(api_url)
+            weather_data = response.json()
+            temperature_c = weather_data['current']['temp_c']
+        except Exception as e:
+            temperature_c = 'N/A'
+            print(f"Error fetching weather data: {e}")
+
         page = Webpage.query.filter_by(slug='home').first()
         return render_template('home.html', time=current_time, hometime=formatted_date, temp=temperature_c,page=page)
 
