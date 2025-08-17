@@ -1,12 +1,13 @@
 import os
 from flask import Flask
 from util.db import db, User
+from config import config
 
 # Initialize Flask app
 app = Flask(__name__)
 
 # Set the correct database URI for SQLite in the instance folder
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.getcwd(), 'instance', 'todo.db')}"
+app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database with the app context
