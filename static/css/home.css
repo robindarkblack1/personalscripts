@@ -1928,3 +1928,11 @@ a{
         }
         .app-window .settings-submenu.show { transform: translateX(0); }
     }
+
+
+
+@media screen and (max-width: 768px) {
+    #desktop-view {
+        display: none;
+    }
+}
