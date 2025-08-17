@@ -52,10 +52,35 @@
 
 
 
-    
-    
+    <!-- This is the main container for the new Desktop UI -->
+<div id="desktop-view">
+    <div id="desktop-icons">
+        <!-- Desktop icons will be populated here by JavaScript -->
+    </div>
 
-<div class="home-screen">
+    <div id="taskbar">
+        <button id="start-button">
+            <i class="bi bi-windows"></i>
+        </button>
+        <div id="taskbar-apps"></div>
+        <div id="taskbar-tray">
+            <span id="desktop-time"></span>
+        </div>
+    </div>
+
+    <div id="start-menu">
+        <div class="start-menu-header">
+            <h3>Pardeep's Portfolio</h3>
+        </div>
+        <div id="start-menu-apps">
+             <!-- Start menu app list will be populated here -->
+        </div>
+    </div>
+</div>
+
+
+<!-- This is the original mobile-only view -->
+<div class="home-screen mobile-view">
     <div class="first-row">
         <div class="time">
             <span>{{time}}</span>

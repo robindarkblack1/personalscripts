@@ -119,6 +119,11 @@
         .activity-section ul li:last-child {
             border-bottom: none;
         }
+        @media (min-width: 768px) {
+            .buttons-container {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
     </style>
 </head>
 <body>

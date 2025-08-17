@@ -1,766 +1,499 @@
+// =================================================== //
+// ================ GLOBAL SETUP ===================== //
+// =================================================== //
 
-    window.addEventListener("load", function() {
-        document.getElementById("preloader").style.display = "none"; // Hide preloader
-        document.body.classList.add("loaded"); // Enable scrolling
+window.addEventListener("load", function() {
+    if(document.getElementById("preloader")) {
+        document.getElementById("preloader").style.display = "none";
+    }
+    document.body.classList.add("loaded");
+});
+
+// This is the main entry point. It decides whether to run
+// the desktop or mobile experience based on screen width.
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.innerWidth >= 768) {
+        initializeDesktopUI();
+    } else {
+        initializeMobileListeners();
+    }
+});
+
+
+// =================================================== //
+// ============ DESKTOP UI INITIALIZATION ============ //
+// =================================================== //
+
+function initializeDesktopUI() {
+    const apps = [
+        { id: 'bio', name: 'My Bio', type: 'json', content: 'bio', icon: 'bi-person-badge' },
+        { id: 'projects', name: 'Projects', type: 'json', content: 'projects', icon: 'bi-grid-fill' },
+        { id: 'todo', name: 'Todo App', type: 'iframe', content: '/dashboard', icon: 'bi-journal-plus' },
+        { id: 'chat', name: 'Click-Chat', type: 'iframe', content: 'https://chat.clickearn.me', icon: 'bi-chat-dots' },
+        { id: 'downloader', name: 'Downloader', type: 'iframe', content: 'https://clickearn.me/Youtube-video-download', icon: 'bi-cloud-arrow-down' },
+        { id: 'instagram', name: 'Instagram', type: 'iframe', content: 'https://www.instagram.com', icon: 'bi-instagram', proxy: 'instagram' },
+        { id: 'linkedin', name: 'LinkedIn', type: 'iframe', content: 'https://www.linkedin.com/in/prdeep-verma-4a1364257/', icon: 'bi-linkedin' },
+        { id: 'github', name: 'GitHub', type: 'iframe', content: 'https://github.com/robindarkblack1', icon: 'bi-github', proxy: true },
+        { id: 'activities', name: 'Activities', type: 'json', content: 'activities', icon: 'bi-lightning-charge-fill' },
+        { id: 'settings', name: 'Settings', type: 'html-clone', content: '#settings-card', icon: 'bi-gear-fill' },
+    ];
+
+    const desktopIconsContainer = document.getElementById('desktop-icons');
+    const startMenuAppsContainer = document.getElementById('start-menu-apps');
+    const startButton = document.getElementById('start-button');
+    const startMenu = document.getElementById('start-menu');
+    const desktopTime = document.getElementById('desktop-time');
+
+    apps.forEach(app => {
+        const desktopIcon = document.createElement('div');
+        desktopIcon.className = 'desktop-icon';
+        desktopIcon.innerHTML = `<div class="icon-image-wrapper"><i class="bi ${app.icon}"></i></div><div class="icon-label">${app.name}</div>`;
+        desktopIcon.addEventListener('dblclick', () => createWindow(app));
+        desktopIconsContainer.appendChild(desktopIcon);
+
+        const startMenuItem = document.createElement('div');
+        startMenuItem.className = 'start-menu-app';
+        startMenuItem.innerHTML = `<i class="bi ${app.icon}" style="font-size: 24px;"></i> <span>${app.name}</span>`;
+        startMenuItem.addEventListener('click', () => {
+            createWindow(app);
+            if(startMenu) startMenu.style.display = 'none';
+        });
+        startMenuAppsContainer.appendChild(startMenuItem);
     });
 
+    if(startButton) startButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if(startMenu) startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', () => {
+        if(startMenu) startMenu.style.display = 'none';
+    });
+    
+    if(startMenu) startMenu.addEventListener('click', e => e.stopPropagation());
+
+    function updateClock() {
+        const now = new Date();
+        if(desktopTime) desktopTime.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+}
 
 
+// =================================================== //
+// ================ WINDOW MANAGEMENT ================ //
+// =================================================== //
 
-// Show context menu
+let zIndexCounter = 100;
+let openWindows = {};
+
+async function createWindow(app) {
+    if (openWindows[app.id]) {
+        focusWindow(openWindows[app.id].element);
+        return;
+    }
+
+    const windowEl = document.createElement('div');
+    windowEl.id = `window-${app.id}`;
+    windowEl.className = 'app-window';
+    windowEl.style.zIndex = zIndexCounter++;
+    windowEl.style.top = `${Math.random() * 15 + 5}%`;
+    windowEl.style.left = `${Math.random() * 25 + 15}%`;
+
+    windowEl.innerHTML = `
+        <div class="window-header">
+            <span class="window-title">${app.name}</span>
+            <div class="window-controls">
+                <button class="window-control-btn minimize-btn">-</button>
+                <button class="window-control-btn maximize-btn">□</button>
+                <button class="window-control-btn close-btn">×</button>
+            </div>
+        </div>
+        <div class="window-body"><div class="loader"></div></div>
+    `;
+    document.getElementById('desktop-view').appendChild(windowEl);
+
+    const windowBody = windowEl.querySelector('.window-body');
+    const loader = windowBody.querySelector('.loader');
+
+    if (app.type === 'iframe') {
+        const iframe = document.createElement('iframe');
+        if (app.proxy === true) {
+            iframe.src = `/proxy?url=${encodeURIComponent(app.content)}`;
+        } else if (app.proxy === 'instagram') {
+            iframe.src = `/instagram-proxy?url=${encodeURIComponent(app.content)}`;
+        } else {
+            iframe.src = app.content;
+        }
+        iframe.onload = () => { if(loader) loader.style.display = 'none'; };
+        windowBody.appendChild(iframe);
+    } else if (app.type === 'json') {
+        const data = await getJsonData();
+        const contentHtml = data[app.content] ? data[app.content].content : '<p>Content not found.</p>';
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'window-body-content';
+        contentDiv.innerHTML = contentHtml;
+        if(loader) loader.remove();
+        windowBody.appendChild(contentDiv);
+
+        // **FIX:** Make icons inside the window open new windows
+        contentDiv.querySelectorAll('.icon-container[onclick]').forEach(icon => {
+            const onclickAttr = icon.getAttribute('onclick');
+            icon.removeAttribute('onclick'); // Prevent original behavior
+            icon.addEventListener('click', () => {
+                const browserMatch = onclickAttr.match(/openBrowser\(['"](.*?)['"]\)/);
+                const instaMatch = onclickAttr.match(/openInstagram\(['"](.*?)['"]\)/);
+                
+                let url, appName, needsProxy, needsInstaProxy;
+
+                if (browserMatch && browserMatch[1]) {
+                    url = browserMatch[1];
+                    appName = icon.querySelector('.icon-label')?.textContent || 'Browser';
+                    needsProxy = true;
+                } else if (instaMatch && instaMatch[1]) {
+                    url = instaMatch[1];
+                    appName = icon.querySelector('.icon-label')?.textContent || 'Instagram';
+                    needsInstaProxy = true;
+                }
+
+                if (url) {
+                    const newApp = {
+                        id: `browser-${Date.now()}`,
+                        name: appName,
+                        type: 'iframe',
+                        content: url,
+                        icon: 'bi-browser-chrome',
+                        proxy: needsProxy,
+                        proxyInsta: needsInstaProxy
+                    };
+                    createWindow(newApp);
+                }
+            });
+        });
+    } else if (app.type === 'html-clone') {
+        const sourceElement = document.querySelector(app.content);
+        if (sourceElement) {
+            const clonedElement = sourceElement.cloneNode(true);
+            clonedElement.style.cssText = 'display:flex; width:100%; height:100%; position:relative; transform:none; top:auto; left:auto;';
+            if(loader) loader.remove();
+            windowBody.appendChild(clonedElement);
+            initializeClonedSettings(clonedElement);
+        }
+    }
+
+    const taskbarIcon = document.createElement('div');
+    taskbarIcon.id = `taskbar-${app.id}`;
+    taskbarIcon.className = 'taskbar-app-icon active';
+    taskbarIcon.innerHTML = `<i class="bi ${app.icon}"></i> <span>${app.name}</span>`;
+    document.getElementById('taskbar-apps').appendChild(taskbarIcon);
+    
+    openWindows[app.id] = { element: windowEl, taskbarIcon: taskbarIcon, minimized: false };
+
+    makeDraggable(windowEl);
+    setupWindowControls(app.id);
+    windowEl.addEventListener('mousedown', () => focusWindow(windowEl));
+    taskbarIcon.addEventListener('click', () => handleTaskbarClick(app.id));
+    focusWindow(windowEl);
+}
+
+function setupWindowControls(appId) {
+    const windowEl = openWindows[appId].element;
+    const closeBtn = windowEl.querySelector('.close-btn');
+    const maximizeBtn = windowEl.querySelector('.maximize-btn');
+    const minimizeBtn = windowEl.querySelector('.minimize-btn');
+
+    closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeWindow(appId); });
+    maximizeBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMaximize(appId); });
+    minimizeBtn.addEventListener('click', (e) => { e.stopPropagation(); minimizeWindow(appId); });
+}
+
+function closeWindow(appId) {
+    if (openWindows[appId]) {
+        openWindows[appId].element.remove();
+        openWindows[appId].taskbarIcon.remove();
+        delete openWindows[appId];
+    }
+}
+
+function toggleMaximize(appId) {
+    openWindows[appId].element.classList.toggle('maximized');
+}
+
+function minimizeWindow(appId) {
+    const win = openWindows[appId];
+    win.element.style.display = 'none';
+    win.taskbarIcon.classList.add('minimized');
+    win.taskbarIcon.classList.remove('active');
+    win.minimized = true;
+}
+
+function handleTaskbarClick(appId) {
+    const win = openWindows[appId];
+    if (win.minimized) {
+        win.element.style.display = 'flex';
+        win.minimized = false;
+        focusWindow(win.element);
+    } else {
+        win.taskbarIcon.classList.contains('active') ? minimizeWindow(appId) : focusWindow(win.element);
+    }
+}
+
+function focusWindow(windowEl) {
+    windowEl.style.zIndex = zIndexCounter++;
+    Object.values(openWindows).forEach(win => {
+        const isActive = win.element === windowEl;
+        win.taskbarIcon.classList.toggle('active', isActive);
+        if(isActive) {
+            win.taskbarIcon.classList.remove('minimized');
+            win.minimized = false;
+        }
+    });
+}
+
+function makeDraggable(el) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    const header = el.querySelector(".window-header");
+    if (header) header.onmousedown = dragMouseDown;
+
+    function dragMouseDown(e) {
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        window.onmouseup = closeDragElement;
+        window.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e.preventDefault();
+        if (el.classList.contains('maximized')) return;
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        el.style.top = (el.offsetTop - pos2) + "px";
+        el.style.left = (el.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        window.onmouseup = null;
+        window.onmousemove = null;
+    }
+}
+
+let jsonData = {};
+async function getJsonData() {
+    if (Object.keys(jsonData).length === 0) {
+        try {
+            let response = await fetch("static/js/data.json");
+            jsonData = await response.json();
+        } catch (error) { console.error("Error loading data.json:", error); }
+    }
+    return jsonData;
+}
+
+function initializeClonedSettings(clonedElement) {
+    const submenus = clonedElement.querySelectorAll('.settings-submenu');
+    clonedElement.querySelectorAll('.settings-item[onclick]').forEach(item => {
+        const onclickAttr = item.getAttribute('onclick');
+        item.onclick = null; // Remove original to prevent conflicts
+        
+        const submenuMatch = onclickAttr.match(/openSubmenu\(['"](.*?)['"]\)/);
+        if (submenuMatch && submenuMatch[1]) {
+            item.addEventListener('click', () => {
+                const targetSubmenu = clonedElement.querySelector(`#${submenuMatch[1]}-menu`);
+                submenus.forEach(sm => sm.classList.remove('show'));
+                if (targetSubmenu) targetSubmenu.classList.add('show');
+            });
+        } else {
+            // For other buttons like dark mode, etc.
+            item.addEventListener('click', () => {
+                try { eval(onclickAttr); } catch(e) { console.error("Error in cloned settings:", e); }
+            });
+        }
+    });
+
+    submenus.forEach(submenu => {
+        const closeBtn = submenu.querySelector('.close-btn');
+        if (closeBtn) {
+            closeBtn.onclick = null;
+            closeBtn.addEventListener('click', () => submenu.classList.remove('show'));
+        }
+    });
+}
+
+// =================================================== //
+// =========== ORIGINAL MOBILE-ONLY SCRIPT =========== //
+// =================================================== //
+
+function initializeMobileListeners() {
+    document.addEventListener("click", () => {
+        const contextMenu = document.getElementById("context-menu");
+        if (contextMenu) contextMenu.style.display = "none";
+    });
+
+    document.querySelectorAll(".icon-container").forEach(icon => {
+        const appName = icon.dataset.app;
+        if (localStorage.getItem(`hidden_${appName}`) === "true") icon.style.display = "none";
+    });
+    
+    const tempSpan = document.querySelector('.time .small-text:last-child');
+    if (tempSpan && tempSpan.textContent.trim().startsWith('°c')) {
+        tempSpan.style.display = 'none';
+    }
+
+    preloadData();
+    applySavedDarkMode();
+    restoreAppStates();
+    
+    const savedWallpaper = localStorage.getItem("customWallpaper");
+    document.body.style.backgroundImage = savedWallpaper ? `url('${savedWallpaper}')` : "url('../static/img/vivobg.png')";
+}
+
 function showContextMenu(event, appName) {
-    event.preventDefault(); // Prevent default right-click menu
-
+    event.preventDefault();
+    event.stopPropagation();
     const contextMenu = document.getElementById("context-menu");
     contextMenu.style.display = "block";
     contextMenu.style.left = `${event.pageX}px`;
     contextMenu.style.top = `${event.pageY}px`;
-
-    // Store the selected app
     contextMenu.dataset.app = appName;
 }
 
-// Hide context menu on click elsewhere
-document.addEventListener("click", () => {
-    document.getElementById("context-menu").style.display = "none";
-});
-
-// Open App Info
-function openAppInfo() {
-    const appName = document.getElementById("context-menu").dataset.app;
-    document.getElementById("app-info-details").textContent = `App: ${appName}`;
-    document.getElementById("app-info-modal").style.display = "block";
-}
-
-// Close App Info
-function closeAppInfo() {
-    document.getElementById("app-info-modal").style.display = "none";
-}
-
-// Uninstall App (Hide & Store in Local Storage)
 function uninstallApp() {
     const appName = document.getElementById("context-menu").dataset.app;
-    const icon = document.querySelector(`[data-app="${appName}"]`);
-    
+    const icon = document.querySelector(`.mobile-view [data-app="${appName}"]`);
     if (icon) {
-        icon.style.display = "none"; // Hide icon
-        localStorage.setItem(`hidden_${appName}`, "true"); // Store in localStorage
+        icon.style.display = "none";
+        localStorage.setItem(`hidden_${appName}`, "true");
     }
 }
-
-// Restore Hidden Icons on Page Load
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".icon-container").forEach(icon => {
-        const appName = icon.dataset.app;
-        if (localStorage.getItem(`hidden_${appName}`) === "true") {
-            icon.style.display = "none";
-        }
-    });
-});
-
-
-// Restore all hidden icons
-function restoreApps() {
-    document.querySelectorAll(".icon-container").forEach(icon => {
-        const appName = icon.dataset.app;
-        localStorage.removeItem(`hidden_${appName}`); // Remove from storage
-        icon.style.display = "flex"; // Show icon again
-    });
-}
-
-
 
 function toggleSettings() {
     const settingsMenu = document.getElementById("settings-card");
-
-    if (settingsMenu.classList.contains("show")) {
-        // Close Animation (Shrink Back)
-        settingsMenu.classList.remove("show");
-        setTimeout(() => {
-            settingsMenu.style.display = "none";
-        }, 400); // Matches transition timing
-    } else {
-        // Ensure Display Before Animation Starts
-        settingsMenu.style.display = "flex";
-        requestAnimationFrame(() => {
-            settingsMenu.classList.add("show");
-        });
-    }
+    settingsMenu.style.display = "flex";
+    requestAnimationFrame(() => settingsMenu.classList.toggle("show"));
 }
 
-
-
-// Open specific submenu
 function openSubmenu(menuId) {
     const menu = document.getElementById(menuId + "-menu");
-    menu.style.display = "flex";
-    setTimeout(() => {
-        menu.classList.add("show");
-    }, 10);
+    if(menu) {
+        menu.style.display = "flex";
+        setTimeout(() => menu.classList.add("show"), 10);
+    }
 }
 
-// Close submenu with animation
 function closeSubmenu(menuId) {
     const menu = document.getElementById(menuId);
-    const button = document.querySelector('.close-btn .arrow');
-
-    if (menu.classList.contains("show")) {
-        // Animate closing
+    if(menu) {
         menu.classList.remove("show");
-        button.innerHTML = "→"; // Change to forward arrow
-        setTimeout(() => {
-            menu.style.display = "none";
-        }, 400); // Match animation duration
-    } else {
-        // Animate opening
-        menu.style.display = "block";
-        setTimeout(() => {
-            menu.classList.add("show");
-            button.innerHTML = "←"; // Change to back arrow
-        }, 10); // Short delay for smoother effect
+        setTimeout(() => { menu.style.display = "none"; }, 400);
     }
 }
 
-
-// Load Wallpaper on Start
-window.onload = function () {
-    const savedWallpaper = localStorage.getItem("wallpaper");
-    if (savedWallpaper) {
-        document.body.style.backgroundImage = `url('${savedWallpaper}')`;
-    }
-};
-
-
-// Toggle Dark Mode (Affects Only App Cards & Settings Card)
 function toggleDarkMode() {
     let darkModeEnabled = document.body.classList.toggle("dark-mode");
-
-    // Save dark mode state
     localStorage.setItem("darkMode", darkModeEnabled ? "enabled" : "disabled");
-
-    // Change text and icon dynamically
-    let darkModeIcon = document.getElementById("dark-mode-icon");
-    let darkModeText = document.getElementById("dark-mode-text");
-
-    if (darkModeEnabled) {
-        darkModeIcon.classList.replace("bi-moon", "bi-sun");
-        darkModeText.innerText = "Light Mode";
-    } else {
-        darkModeIcon.classList.replace("bi-sun", "bi-moon");
-        darkModeText.innerText = "Dark Mode";
-    }
-
-    // Apply dark mode to all app cards
-    document.querySelectorAll(".icon-container").forEach(card => {
-        card.classList.toggle("dark-mode-app", darkModeEnabled);
-    });
-
-    // Force settings card to apply the correct theme
-    let settingsCard = document.querySelector(".settings-card");
-    if (darkModeEnabled) {
-        settingsCard.classList.add("dark-mode");
-        settingsCard.style.background = "#111"; // Dark mode background
-        settingsCard.style.color = "#fff"; // Dark mode text color
-    } else {
-        settingsCard.classList.remove("dark-mode");
-        settingsCard.style.background = "#fff"; // Light mode background
-        settingsCard.style.color = "#000"; // Light mode text color
-    }
+    applySavedDarkMode();
 }
 
-// Restore Dark Mode on Load (Force Manual Preference)
 function applySavedDarkMode() {
     let darkModeEnabled = localStorage.getItem("darkMode") === "enabled";
-
-    if (darkModeEnabled) {
-        document.body.classList.add("dark-mode");
-        document.getElementById("dark-mode-icon").classList.replace("bi-moon", "bi-sun");
-        document.getElementById("dark-mode-text").innerText = "Light Mode";
-
-        document.querySelectorAll(".icon-container").forEach(card => {
-            card.classList.add("dark-mode-app");
-        });
-
-        let settingsCard = document.querySelector(".settings-card");
-        settingsCard.classList.add("dark-mode");
-        settingsCard.style.background = "#111";
-        settingsCard.style.color = "#fff";
-    } else {
-        document.body.classList.remove("dark-mode");
-        document.getElementById("dark-mode-icon").classList.replace("bi-sun", "bi-moon");
-        document.getElementById("dark-mode-text").innerText = "Dark Mode";
-
-        document.querySelectorAll(".icon-container").forEach(card => {
-            card.classList.remove("dark-mode-app");
-        });
-
-        let settingsCard = document.querySelector(".settings-card");
-        settingsCard.classList.remove("dark-mode");
-        settingsCard.style.background = "#fff";
-        settingsCard.style.color = "#000";
-    }
+    document.body.classList.toggle("dark-mode", darkModeEnabled);
+    const darkModeIcon = document.getElementById("dark-mode-icon");
+    const darkModeText = document.getElementById("dark-mode-text");
+    if (darkModeIcon) darkModeIcon.className = darkModeEnabled ? "bi bi-sun" : "bi bi-moon";
+    if (darkModeText) darkModeText.innerText = darkModeEnabled ? "Light Mode" : "Dark Mode";
 }
 
-// Apply saved mode on load
-applySavedDarkMode();
-
-
-
-
-
-// Function to handle wallpaper change and store it in local storage
 function changeWallpaper(event) {
     const file = event.target.files[0];
-
     if (file) {
         const reader = new FileReader();
-        reader.onload = function (e) {
-            const imageData = e.target.result;
-            localStorage.setItem("customWallpaper", imageData);
-            document.body.style.backgroundImage = `url('${imageData}')`;
+        reader.onload = (e) => {
+            localStorage.setItem("customWallpaper", e.target.result);
+            document.body.style.backgroundImage = `url('${e.target.result}')`;
         };
         reader.readAsDataURL(file);
     }
 }
 
-// Open file picker when "Change Wallpaper" is clicked
-function openWallpaperUpload() {
-    document.getElementById("wallpaper-upload").click();
-}
-
-// Reset wallpaper to default
+function openWallpaperUpload() { document.getElementById("wallpaper-upload").click(); }
 function resetWallpaper() {
-    localStorage.removeItem("customWallpaper");  // Remove from local storage
-    document.body.style.backgroundImage = "url('../static/img/vivobg.png')"; // Default wallpaper
+    localStorage.removeItem("customWallpaper");
+    document.body.style.backgroundImage = "url('../static/img/vivobg.png')";
 }
 
-// Load stored wallpaper on page load
-document.addEventListener("DOMContentLoaded", function () {
-    const savedWallpaper = localStorage.getItem("customWallpaper");
-    if (savedWallpaper) {
-        document.body.style.backgroundImage = `url('${savedWallpaper}')`;
-    } else {
-        document.body.style.backgroundImage = "url('../static/img/vivobg.png')";
+async function openWindow(type) {
+    const title = document.getElementById("window-title");
+    const content = document.getElementById("window-content");
+    const data = await getJsonData();
+    if (data[type]) {
+        title.innerText = data[type].title;
+        content.innerHTML = data[type].content;
     }
-});
-
-
-
-// Toggle Notifications
-function toggleNotifications() {
-    alert("Notifications settings are not available yet!");
+    let windowDiv = document.getElementById("small-window");
+    windowDiv.style.display = "block";  
+    setTimeout(() => { windowDiv.classList.add("show"); }, 10);
 }
 
-// Toggle Wi-Fi
-function toggleWifi() {
-    let wifiStatus = document.getElementById("wifi-status");
-    if (wifiStatus.innerText === "On") {
-        wifiStatus.innerText = "Off";
-        wifiStatus.style.color = "red";
-    } else {
-        wifiStatus.innerText = "On";
-        wifiStatus.style.color = "green";
-    }
+function closeWindow() { // Renamed from closeMobileWindow to avoid confusion
+    let windowDiv = document.getElementById("small-window");
+    windowDiv.classList.remove("show");
+    setTimeout(() => { windowDiv.style.display = "none"; }, 600);
 }
 
-// Toggle Bluetooth
-function toggleBluetooth() {
-    let bluetoothStatus = document.getElementById("bluetooth-status");
-    if (bluetoothStatus.innerText === "Off") {
-        bluetoothStatus.innerText = "On";
-        bluetoothStatus.style.color = "blue";
-    } else {
-        bluetoothStatus.innerText = "Off";
-        bluetoothStatus.style.color = "gray";
+function openBrowser(url) {
+    const browserCard = document.getElementById("browser-card");
+    const browserFrame = document.getElementById("browser-frame");
+    const browserLoader = document.getElementById("browser-loader");
+    if(browserLoader) browserLoader.style.display = "block";
+    if(browserCard) browserCard.style.display = "block";
+    setTimeout(() => browserCard.classList.add("active"), 10);
+    if(browserFrame) {
+        browserFrame.src = `/proxy?url=${encodeURIComponent(url)}`;
+        browserFrame.onload = () => { if(browserLoader) browserLoader.style.display = "none"; };
     }
 }
 
-// Change Language
-function changeLanguage() {
-    let selectedLanguage = document.getElementById("language-select").value;
-    alert("Language changed to: " + selectedLanguage);
-}
-
-// Save Security PIN
-function savePin() {
-    let pin = document.getElementById("pin-input").value;
-    if (pin.length >= 4) {
-        localStorage.setItem("userPIN", pin);
-        alert("PIN saved successfully!");
-    } else {
-        alert("PIN must be at least 4 digits.");
+function openInstagram(url) {
+    const browserCard = document.getElementById("browser-card");
+    const browserFrame = document.getElementById("browser-frame");
+    const browserLoader = document.getElementById("browser-loader");
+    if(browserLoader) browserLoader.style.display = "block";
+    if(browserCard) browserCard.style.display = "block";
+    setTimeout(() => browserCard.classList.add("active"), 10);
+    if(browserFrame) {
+        browserFrame.src = `/instagram-proxy?url=${encodeURIComponent(url)}`;
+        browserFrame.onload = () => { if(browserLoader) browserLoader.style.display = "none"; };
     }
 }
 
-// Logout Function
-function logout() {
-    alert("Logging out...");
-    location.reload();
-}
-function showAppMenu(menuId) {
-    console.log("Opening app details:", menuId);
-
-    // Close all other app submenus before opening a new one
-    document.querySelectorAll(".app-submenu").forEach(menu => {
-        if (menu.id !== menuId) {
-            menu.classList.remove("visible");
-        }
-    });
-
-    // Open the selected app submenu
-    let menu = document.getElementById(menuId);
-    if (menu) {
-        menu.classList.add("visible");
-
-        // Make sure the menu is draggable
-        makeDraggable(menu);
-    }
-}
-
-function hideAppMenu(menuId) {
-    let menu = document.getElementById(menuId);
-    if (menu) {
-        menu.classList.remove("visible");
-    }
-}
-
-// Function to make submenus draggable
-function makeDraggable(menu) {
-    let isDragging = false;
-    let offsetX = 0, offsetY = 0;
-
-    // Set default positioning
-    menu.style.position = "absolute";
-    menu.style.zIndex = "1000"; // Ensure it's above other elements
-
-    menu.onmousedown = (event) => {
-        isDragging = true;
-        
-        // Get the initial cursor position relative to the menu
-        offsetX = event.clientX - menu.getBoundingClientRect().left;
-        offsetY = event.clientY - menu.getBoundingClientRect().top;
-
-        // Move the menu on mouse move
-        document.onmousemove = (e) => {
-            if (isDragging) {
-                menu.style.left = `${e.clientX - offsetX}px`;
-                menu.style.top = `${e.clientY - offsetY}px`;
-            }
-        };
-
-        // Stop dragging on mouse up
-        document.onmouseup = () => {
-            isDragging = false;
-            document.onmousemove = null;
-            document.onmouseup = null;
-        };
-    };
-
-    // Prevent text selection while dragging
-    menu.ondragstart = () => false;
-}
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    restoreAppStates(); // Restore states on page load
-});
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    restoreAppStates(); // Restore app visibility on page load
-});
-
-function toggleButton(buttonId) {
-    let button = document.getElementById(buttonId);
-    let appName = buttonId.replace('-btn', ''); // Extract app name from button ID
-    let appIcon = document.querySelector(`.icon-container[data-app="${appName}"]`);
-
-    let isDisabled = localStorage.getItem(appName) === "disabled"; // Check if disabled
-
-    if (isDisabled) {
-        // Enable the app
-        button.innerText = "Disable";
-        button.style.background = "red";
-        localStorage.setItem(appName, "enabled"); // Store state
-        if (appIcon) appIcon.style.display = "flex"; // Show app icon
-    } else {
-        // Disable the app
-        button.innerText = "Enable";
-        button.style.background = "";
-        localStorage.setItem(appName, "disabled"); // Store state
-        if (appIcon) appIcon.style.display = "none"; // Hide app icon
-    }
-}
-
-// Restore app states on page load
-function restoreAppStates() {
-    let buttons = document.querySelectorAll(".app-info button");
-
-    buttons.forEach(button => {
-        let appName = button.id.replace('-btn', ''); // Extract app name
-        let appIcon = document.querySelector(`.icon-container[data-app="${appName}"]`);
-        let isDisabled = localStorage.getItem(appName) === "disabled"; // Check if disabled
-
-        if (isDisabled) {
-            button.innerText = "Enable";
-            button.style.background = "";
-            if (appIcon) appIcon.style.display = "none"; // Hide app icon
-        } else {
-            button.innerText = "Disable";
-            button.style.background = "red";
-            if (appIcon) appIcon.style.display = "flex"; // Show app icon
-        }
-    });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-let lastScrollTop = 0;
-const notificationCard = document.querySelector(".notification-card");
-const smallWindow = document.getElementById("small-window");
-const Feedbackcard = document.getElementById("feedback-card");
-
-
-document.addEventListener("touchmove", function (event) {
-    let isInsideSmallWindow = event.target.closest(".small-window"); // Check if inside small window
-    let isInsideFeedbackCard = event.target.closest("#feedback-card"); // Check if inside feedback card
-    if (!isInsideSmallWindow && !isInsideFeedbackCard) {
-        event.preventDefault(); // Prevent scrolling only outside the small window and feedback card
-    }
-}, { passive: false });
-
-
-// **Scroll Detection (Laptop/Desktop)**
-window.addEventListener("scroll", function () {
-let scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-// Prevent triggering notification card if `.small-window` is open
-if (smallWindow && smallWindow.style.display === "block") return;  
-if (Feedbackcard && Feedbackcard.style.display === "block") return;  
-
-if (scrollTop > lastScrollTop + 20) { // Scroll down
-    notificationCard.classList.add("show");
-} else if (scrollTop < lastScrollTop - 20) { // Scroll up
-    notificationCard.classList.remove("show");
-}
-
-lastScrollTop = scrollTop;
-}, { passive: true });
-
-// **Touch Detection (Mobile) - Prevent Notification Swipe in Small Window**
-let startY = 0;
-
-document.addEventListener("touchstart", (event) => {
-startY = event.touches[0].clientY; // Get initial touch position
-}, { passive: true });
-
-document.addEventListener("touchend", (event) => {
-let endY = event.changedTouches[0].clientY; // Get touch end position
-let diffY = endY - startY;
-
-// Prevent notification from appearing if `.small-window` is open
-if (smallWindow && smallWindow.style.display === "block") return;  
-if (Feedbackcard && Feedbackcard.style.display === "block") return;  
-
-if (diffY > 30) { // Swipe Down (Show Notification)
-    notificationCard.classList.add("show");
-} else if (diffY < -30) { // Swipe Up (Hide Notification)
-    notificationCard.classList.remove("show");
-}
-});
-
-// **Close Small Window Function (If needed)**
-function closeWindow() {
-smallWindow.style.display = "none"; // Hide the small window
-}
-
-
-
-    const brightnessSlider = document.getElementById("brightness-slider");
-
-brightnessSlider.addEventListener("input", function() {
-let brightness = this.value;
-document.body.style.filter = `brightness(${brightness}%)`;
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
+function closeBrowser() {
+    const browserCard = document.getElementById("browser-card");
+    browserCard.classList.remove("active");
     setTimeout(() => {
-        let notification = document.getElementById("iphone-notification");
-        notification.classList.add("show");
-
-        setTimeout(() => {
-            notification.classList.add("hide");
-        }, 2000); // Hide after 4 seconds
-    }, 3000); // Show after 5 seconds
-});
-
-function openNotification(type) {
-    let title = "";
-    let message = "";
-    let url = "";
-
-    switch (type) {
-        case 'instagram':
-            title = "Instagram";
-            message = "Opening Instagram... 📷";
-            url = "https://www.instagram.com";
-            break;
-        case 'github':
-            title = "GitHub";
-            message = "Opening GitHub... 🛠️";
-            url = "https://github.com/robindarkblack1";
-            break;
-        case 'errors':
-            title = "Site Errors";
-            message = "Checking for site errors... 🔍";
-            break;
-        case 'feedback':
-            title = "Feedback Alert";
-            message = "The Army of Bugs has breached our defenses! 🐞🔥 Pages are crashing, buttons are broken, and chaos is spreading fast! 😱 We sent our best developer to the frontlines… but they vanished without a trace. Only an ominous .'Syntax Error' remained. 👀💀 Now, the fate of our code rests in your hands! 💻⚔️ Will you rise as a hero, or let the bugs claim victory? 😈🐛";
-            break;
-        default:
-            console.log("Unknown notification clicked");
-            return;
-    }
-
-    // Show the notification card
-    showNotification(title, message, url);
+        browserCard.style.display = "none";
+        document.getElementById("browser-frame").src = "about:blank";
+    }, 300);
 }
-
-// Function to display a notification card
-function showNotification(title, message, url = "") {
-    let notificationCard = document.createElement("div");
-    notificationCard.classList.add("custom-notification");
-
-    notificationCard.innerHTML = `
-        <div class="notification-icon"><i class="bi bi-bell-fill"></i></div>
-        <div class="notification-content">
-            <span class="notification-title">${title}</span>
-            <p class="notification-message">${message}</p>
-        </div>
-    `;
-
-    // Add click event to open URL if provided
-    if (url) {
-        notificationCard.addEventListener("click", function () {
-            window.open(url, "_blank");
-        });
-    }
-
-    // Append to body and show notification
-    document.body.appendChild(notificationCard);
-    setTimeout(() => {
-        notificationCard.classList.add("show");
-    }, 100);
-
-    // Auto-hide after 3 seconds
-    setTimeout(() => {
-        notificationCard.classList.remove("show");
-        setTimeout(() => notificationCard.remove(), 500);
-    }, 10000);
-}
-
 
 function openFeedback() {
     let feedbackCard = document.getElementById('feedback-card');
-
-    feedbackCard.style.display = 'block';
-    document.body.classList.add('no-scroll');
+    if(feedbackCard) feedbackCard.style.display = 'block';
 }
 
 function closeFeedback() {
     let feedbackCard = document.getElementById('feedback-card');
-
-    feedbackCard.style.display = 'none';
-    document.body.classList.remove('no-scroll');
+    if(feedbackCard) feedbackCard.style.display = 'none';
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-let jsonData = {};  // Global variable to store JSON data
-
-// Preload JSON data when home.html loads
-async function preloadData() {
-    try {
-        let response = await fetch("static/js/data.json");
-        jsonData = await response.json();
-    } catch (error) {
-        console.error("Error preloading data:", error);
-    }
-}
-
-// Call the function to preload JSON data when the page loads
-window.addEventListener("DOMContentLoaded", preloadData);
-
-// Function to open a window using preloaded data
-async function openWindow(type) {
-    let title = document.getElementById("window-title");
-    let content = document.getElementById("window-content");
-
-    if (jsonData[type]) {
-        title.innerText = jsonData[type].title;
-        content.innerHTML = jsonData[type].content;
-    } else {
-        title.innerText = "Not Found";
-        content.innerHTML = "<p>No content available.</p>";
-    }
-
-    let windowDiv = document.getElementById("small-window");
-    windowDiv.style.display = "block";  
-    setTimeout(() => {
-        windowDiv.classList.add("show");
-        windowDiv.classList.remove("hide");
-    }, 10);
-}
-
-function closeWindow() {
-let windowDiv = document.getElementById("small-window");
-windowDiv.classList.remove("show");
-windowDiv.classList.add("hide");
-
-setTimeout(() => {
-    windowDiv.style.display = "none";
-    windowDiv.classList.remove("hide");  // Reset for next open
-}, 600); // Matches CSS transition duration
-}
-
-
-function openBrowser(url) {
-    let browserFrame = document.getElementById("browser-frame");
-    let browserLoader = document.getElementById("browser-loader");
-    let browserCard = document.getElementById("browser-card");
-
-    console.log("🔄 Attempting to open URL:", url);
-
-    // Show loader
-    browserLoader.style.display = "block";
-
-    // Set display to block first, then trigger animation
-    browserCard.style.display = "block";
-    setTimeout(() => {
-        browserCard.classList.add("active"); // Apply animation
-    }, 10);
-
-    // Load website through Flask proxy
-    browserFrame.src = `/proxy?url=${encodeURIComponent(url)}`;
-
-    // Debug iframe load success
-    browserFrame.onload = function () {
-        browserLoader.style.display = "none";
-        console.log("✅ Iframe loaded successfully:", browserFrame.src);
-    };
-
-    // Debug iframe errors
-    browserFrame.onerror = function () {
-        browserLoader.style.display = "none";
-        console.error("❌ Error loading iframe:", browserFrame.src);
-    };
-}
-
-
-function openInstagram(url) {
-    let browserFrame = document.getElementById("browser-frame");
-    let browserLoader = document.getElementById("browser-loader");
-    let browserCard = document.getElementById("browser-card");
-
-    console.log("🔄 Attempting to open Instagram:", url);
-
-    // Show loader
-    browserLoader.style.display = "block";
-
-    // Set display to block first, then trigger animation
-    browserCard.style.display = "block";
-    setTimeout(() => {
-        browserCard.classList.add("active"); // Apply animation
-    }, 10);
-
-    // Load Instagram through proxy
-    browserFrame.src = `/instagram-proxy?url=${encodeURIComponent(url)}`;
-
-    // Debug iframe load success
-    browserFrame.onload = function () {
-        browserLoader.style.display = "none";
-        console.log("✅ Instagram loaded successfully:", browserFrame.src);
-    };
-
-    // Debug iframe errors
-    browserFrame.onerror = function () {
-        browserLoader.style.display = "none";
-        console.error("❌ Error loading Instagram:", browserFrame.src);
-    };
-}
-
-
-
-function openDirectBrowser(url) {
-    let browserFrame = document.getElementById("browser-frame");
-    let browserLoader = document.getElementById("browser-loader");
-    let browserCard = document.getElementById("browser-card");
-
-    if (!browserFrame || !browserLoader || !browserCard) {
-        console.error("Required elements not found!");
-        return;
-    }
-
-    // Show loader & open browser card smoothly
-    browserLoader.style.display = "block";
-    browserCard.style.display = "block";
-    browserCard.classList.add("active");
-
-    // Directly load the website
-    browserFrame.src = url;
-
-    // Hide loader when the iframe loads successfully
-    browserFrame.onload = () => {
-        browserLoader.style.display = "none";
-    };
-
-    // Handle iframe errors properly
-    browserFrame.onerror = () => {
-        browserLoader.style.display = "none";
-        console.error("Error loading website:", url);
-    };
-}
-
-
-
-function closeBrowser() {
-    let browserCard = document.getElementById("browser-card");
-
-    // Remove animation class
-    browserCard.classList.remove("active");
-
-    // Wait for animation to finish before hiding
-    setTimeout(() => {
-        browserCard.style.display = "none";
-        document.getElementById("browser-frame").src = ""; // Clear iframe for fresh load
-    }, 300); // Matches CSS transition duration
+function restoreAppStates() {
+    document.querySelectorAll(".app-info button").forEach(button => {
+        let appName = button.id.replace('-btn', '');
+        let appIcon = document.querySelector(`.icon-container[data-app="${appName}"]`);
+        let isDisabled = localStorage.getItem(appName) === "disabled";
+        button.innerText = isDisabled ? "Enable" : "Disable";
+        if (appIcon) appIcon.style.display = isDisabled ? "none" : "flex";
+    });
 }

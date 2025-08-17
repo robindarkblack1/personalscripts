@@ -40,3 +40,9 @@ body {
     margin-bottom: 5px;
     color: #00509d;
 }
+
+@media (min-width: 768px) {
+    .signup-container {
+        max-width: 600px;
+        padding: 40px;
+    }}

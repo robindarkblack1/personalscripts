@@ -223,6 +223,14 @@ button a:hover {
   list-style: none;
   font-weight: bold;
 }
+
+@media (max-width: 768px) {
+    .user-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
 .success{
   font-size: medium;
   color: green;

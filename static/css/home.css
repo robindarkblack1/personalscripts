@@ -1,7 +1,12 @@
-body{
+body {
     background-image: url("../img/vivobg.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     user-select: none;
-   
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    overflow: hidden; /* Prevent body scroll */
 }
 
 /* Preloader Container */
@@ -171,11 +176,12 @@ body {
 .time {
     font-size: 35px;
     color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-bottom: min(15vh, 120px); /* Increases on large screens, decreases on small screens */
+    margin-bottom: min(15vh, 120px);
 }
 
 .small-text {
@@ -219,6 +225,8 @@ body {
     align-items: center;
     text-align: center;
     width: 70px; /* Standardized for all icons */
+    cursor: pointer;
+    text-decoration: none;
 }
 
 /* Icon Styling */
@@ -470,6 +478,7 @@ body {
 
 
 
+
 /* Unique gradient for Downloader icon */
 .video-downloader-icon-wrapper {
     background: linear-gradient(135deg, #ff7eb3, #ff758c); /* Smooth Pinkish-Red Gradient */
@@ -558,12 +567,11 @@ body {
     text-align: center;
     cursor: pointer;
 }
-
 .icon-label {
-    display: block;
+    font-size: 12px;
+    color: white;
     margin-top: 5px;
-    font-size: 14px;
-    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.7);
 }
 
 /* Feedback Card */
@@ -650,7 +658,6 @@ body {
 .hidden {
     display: none;
 }
-
 
 
 
@@ -787,8 +794,6 @@ body.no-scroll {
 .hidden {
     display: none;
 }
-
-
 
 
 
@@ -1247,8 +1252,6 @@ button:disabled {
 
 
 
-
-
 /* Dark Mode */
 .dark-mode .settings-submenu,
 .dark-mode .app-details {
@@ -1291,8 +1294,6 @@ button:hover {
 .settings-item:hover {
     background: rgba(255, 255, 255, 0.1);
 }
-
-
 
 
 
@@ -1521,8 +1522,6 @@ a{
 
 
 
-
-
 /* Default Hidden State */
 #browser-card {
     position: fixed;
@@ -1553,16 +1552,24 @@ a{
 /* Header with close button */
 .browser-header {
     position: absolute;
-    top: 5px; /* Move it up */
-    right: 10px; /* Align to right */
-    width: auto; /* Prevent full width issue */
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
-    justify-content: flex-end; /* Align close button to the right */
+    justify-content: space-between;
+    align-items: center;
     z-index: 10000; /* Ensure it's above iframe */
+    padding: 5px 10px;
 }
 
+.browser-header .title {
+    color: white;
+    font-weight: bold;
+}
+
+
 /* Close button styling */
-.close-btn {
+.browser-header .close-btn {
     color: white;
     font-size: 22px;
     padding: 5px 10px;
@@ -1576,7 +1583,7 @@ a{
 }
 
 /* Improve hover effect */
-.close-btn:hover {
+.browser-header .close-btn:hover {
     color: rgba(255, 255, 255, 0.8);
     text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
     transition: 0.2s ease-in-out;
@@ -1591,6 +1598,8 @@ a{
     position: absolute;
     top: 0;
     left: 0;
+    padding-top: 35px; /* Space for the header */
+    box-sizing: border-box;
 }
 
 /* Loader animation */
@@ -1714,7 +1723,7 @@ a{
     opacity: 0;
 }
 
-\.submenu {
+.submenu {
     display: none;
     opacity: 0;
     transform: translateX(20px);
@@ -1738,3 +1747,184 @@ a{
     display: inline-block;
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
+
+/* Add other mobile styles here... */
+
+
+/* ================================================= */
+/* ============= DESKTOP STYLES START ============== */
+/* ================================================= */
+
+/* We use a media query to apply desktop styles only on larger screens */    @media (min-width: 768px) {
+        .mobile-view {
+            display: none !important;
+        }
+
+        #desktop-view {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #desktop-icons {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 20px;
+            height: calc(100vh - 40px);
+        }
+
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80px;
+            padding: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .desktop-icon:hover { background-color: rgba(255, 255, 255, 0.15); }
+        .desktop-icon:active { background-color: rgba(255, 255, 255, 0.25); }
+
+        .desktop-icon .icon-image-wrapper {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            color: white;
+        }
+
+        #taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background-color: rgba(10, 10, 20, 0.8);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #start-button {
+            width: 45px;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #start-button:hover { background-color: rgba(255, 255, 255, 0.15); }
+
+        #taskbar-apps { display: flex; height: 100%; gap: 2px; }
+
+        .taskbar-app-icon {
+            height: 100%;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: transparent;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+            font-size: 13px;
+        }
+        .taskbar-app-icon:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .taskbar-app-icon.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-bottom: 3px solid #00aaff;
+        }
+        .taskbar-app-icon.minimized { border-bottom: 3px solid #888; }
+        .taskbar-app-icon .bi { font-size: 18px; }
+        #taskbar-tray { margin-left: auto; padding-right: 15px; color: white; font-size: 13px; }
+
+        #start-menu {
+            position: fixed;
+            bottom: 40px;
+            left: 0;
+            width: 350px;
+            height: 500px;
+            background-color: rgba(20, 20, 30, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 0 8px 0 0;
+            display: none;
+            flex-direction: column;
+            z-index: 9998;
+            animation: slideUp 0.2s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .start-menu-header { padding: 15px; color: white; border-bottom: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
+        #start-menu-apps { padding: 10px; overflow-y: auto; flex-grow: 1; }
+        .start-menu-app { display: flex; align-items: center; padding: 10px; gap: 15px; color: white; border-radius: 4px; cursor: pointer; transition: background-color 0.2s; }
+        .start-menu-app:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .start-menu-app .bi { font-size: 24px; }
+
+        .app-window {
+            position: absolute;
+            min-width: 300px;
+            min-height: 200px;
+            width: 60vw;
+            height: 70vh;
+            background-color: #2e2e3a;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            resize: both;
+        }
+        .app-window.maximized { top: 0 !important; left: 0 !important; width: 100vw !important; height: calc(100vh - 40px) !important; border-radius: 0; resize: none; }
+        .window-header { height: 30px; background-color: #1e1e28; display: flex; align-items: center; padding: 0 5px 0 10px; cursor: move; flex-shrink: 0; }
+        .window-title { color: #e0e0e0; font-size: 13px; font-weight: 500; white-space: nowrap; }
+        .window-controls { margin-left: auto; display: flex; }
+        .window-control-btn { width: 30px; height: 30px; border: none; background: transparent; color: #e0e0e0; cursor: pointer; font-size: 16px; line-height: 30px; text-align: center; }
+        .window-control-btn:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .window-control-btn.close-btn:hover { background-color: #e81123; color: white; }
+        .window-body { flex-grow: 1; padding: 0; overflow: auto; position: relative; }
+        .window-body .loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .window-body iframe { width: 100%; height: 100%; border: none; background-color: #fff; }
+
+        /* **FIX:** Style for JSON/HTML content to match mobile UI */
+        .window-body-content, .window-body .settings-card {
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            line-height: 1.6;
+            height: 100%;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        .window-body-content .icon-container { cursor: pointer; }
+        .window-body-content h2, .window-body-content h3 { color: #ffdd57; }
+        
+        /* **FIX:** Handle settings submenus inside a window */
+        .app-window .settings-card { overflow: hidden; }
+        .app-window .settings-submenu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 10;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .app-window .settings-submenu.show { transform: translateX(0); }
+    }
