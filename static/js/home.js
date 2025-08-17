@@ -98,7 +98,7 @@ async function createWindow(app) {
     windowEl.id = `window-${app.id}`;
     windowEl.className = 'app-window';
     windowEl.style.zIndex = zIndexCounter++;
-    windowEl.style.top = `${Math.random() * 15 + 5}%`;
+    windowEl.style.top = `${Math.random() * 5 + 2}%`;
     windowEl.style.left = `${Math.random() * 25 + 15}%`;
 
     windowEl.innerHTML = `
@@ -330,6 +330,9 @@ function initializeClonedSettings(clonedElement) {
 // =================================================== //
 
 function initializeMobileListeners() {
+    if (window.innerWidth >= 768) {
+        return;
+    }
     document.addEventListener("click", () => {
         const contextMenu = document.getElementById("context-menu");
         if (contextMenu) contextMenu.style.display = "none";
