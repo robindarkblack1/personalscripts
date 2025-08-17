@@ -37,4 +37,14 @@ class ActivityLog(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return f'<ActivityLog {self.user_email} - {self.action}>' 
+        return f'<ActivityLog {self.user_email} - {self.action}>'
+
+class File(db.Model):
+    __tablename__ = 'file'
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(255), nullable=False)
+    unique_filename = db.Column(db.String(255), unique=True, nullable=False)
+    upload_date = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+
+    user = db.relationship('User', backref='files', lazy=True)

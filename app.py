@@ -9,10 +9,10 @@ from util.helper import safe_import
 from util.auth import configure_oauth
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-def create_app():
+def create_app(config_object=config):
     """Initialize and configure the Flask app."""
     app = Flask(__name__)
-    app.config.from_object(config)
+    app.config.from_object(config_object)
     oauth = configure_oauth(app)
     db.init_app(app)
 
@@ -20,12 +20,14 @@ def create_app():
     comp = safe_import('routes.compiler', 'comp')
     todo = safe_import('routes.todo', 'todo')
     admin = safe_import('routes.admin_routes', 'admin_routes')
+    file_routes = safe_import('routes.file_routes', 'file_routes')
 
 
     # Register blueprints
     app.register_blueprint(comp.comp)
     app.register_blueprint(todo.todo)
     app.register_blueprint(admin.admin_routes)
+    app.register_blueprint(file_routes.file_routes)
 
     # Global error handler
     app.register_error_handler(Exception, handle_exception)
