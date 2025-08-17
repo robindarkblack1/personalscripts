@@ -6,6 +6,7 @@ body {
     user-select: none;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
+    overflow: hidden; /* Prevent body scroll */
 }
 
 /* Preloader Container */
@@ -37,12 +38,12 @@ body {
 }
 
 /* Hide content until page is loaded */
-body:not(.loaded) {
+body {
     overflow: hidden; /* Prevent scrolling while loading */
 }
 
 /* Once loaded, show content */
-body.loaded {
+.loaded body {
     overflow: auto;
 }
 
@@ -1763,13 +1764,15 @@ a{
             display: block;
             width: 100vw;
             height: 100vh;
+            overflow: hidden;
         }
 
         #desktop-icons {
-            overflow-y: auto;
             padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
             gap: 20px;
             height: calc(100vh - 40px);
         }
@@ -1865,6 +1868,9 @@ a{
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .start-menu-header { padding: 15px; color: white; border-bottom: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0; }
         #start-menu-apps { padding: 10px; overflow-y: auto; flex-grow: 1; }
+        .body-no-scroll {
+            overflow: hidden;
+        }
         .start-menu-app { display: flex; align-items: center; padding: 10px; gap: 15px; color: white; border-radius: 4px; cursor: pointer; transition: background-color 0.2s; }
         .start-menu-app:hover { background-color: rgba(255, 255, 255, 0.1); }
         .start-menu-app .bi { font-size: 24px; }
@@ -1928,8 +1934,10 @@ a{
 
 
 
-@media screen and (max-width: 768px) {
-    #desktop-view {
-        display: none;
-    }
+.desktop-view-active .mobile-view {
+    display: none !important;
+}
+
+.mobile-view-active #desktop-view {
+    display: none !important;
 }

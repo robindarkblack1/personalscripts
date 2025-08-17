@@ -13,8 +13,10 @@ window.addEventListener("load", function() {
 // the desktop or mobile experience based on screen width.
 document.addEventListener('DOMContentLoaded', () => {
     if (window.innerWidth >= 768) {
+        document.body.classList.add('desktop-view-active');
         initializeDesktopUI();
     } else {
+        document.body.classList.add('mobile-view-active');
         initializeMobileListeners();
     }
 });
@@ -45,12 +47,6 @@ function initializeDesktopUI() {
     const desktopTime = document.getElementById('desktop-time');
 
     apps.forEach(app => {
-        const desktopIcon = document.createElement('div');
-        desktopIcon.className = 'desktop-icon';
-        desktopIcon.innerHTML = `<div class="icon-image-wrapper"><i class="bi ${app.icon}"></i></div><div class="icon-label">${app.name}</div>`;
-        desktopIcon.addEventListener('dblclick', () => createWindow(app));
-        desktopIconsContainer.appendChild(desktopIcon);
-
         const startMenuItem = document.createElement('div');
         startMenuItem.className = 'start-menu-app';
         startMenuItem.innerHTML = `<i class="bi ${app.icon}" style="font-size: 24px;"></i> <span>${app.name}</span>`;
@@ -63,11 +59,18 @@ function initializeDesktopUI() {
 
     if(startButton) startButton.addEventListener('click', (e) => {
         e.stopPropagation();
-        if(startMenu) startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
+        if(startMenu) {
+            const isVisible = startMenu.style.display === 'block';
+            startMenu.style.display = isVisible ? 'none' : 'block';
+            document.body.classList.toggle('body-no-scroll', !isVisible);
+        }
     });
 
     document.addEventListener('click', () => {
-        if(startMenu) startMenu.style.display = 'none';
+        if(startMenu && startMenu.style.display === 'block') {
+            startMenu.style.display = 'none';
+            document.body.classList.remove('body-no-scroll');
+        }
     });
     
     if(startMenu) startMenu.addEventListener('click', e => e.stopPropagation());
@@ -98,7 +101,7 @@ async function createWindow(app) {
     windowEl.id = `window-${app.id}`;
     windowEl.className = 'app-window';
     windowEl.style.zIndex = zIndexCounter++;
-    windowEl.style.top = `${Math.random() * 5 + 2}%`;
+    windowEl.style.top = `${Math.random() * 15 + 5}%`;
     windowEl.style.left = `${Math.random() * 25 + 15}%`;
 
     windowEl.innerHTML = `
@@ -330,9 +333,6 @@ function initializeClonedSettings(clonedElement) {
 // =================================================== //
 
 function initializeMobileListeners() {
-    if (window.innerWidth >= 768) {
-        return;
-    }
     document.addEventListener("click", () => {
         const contextMenu = document.getElementById("context-menu");
         if (contextMenu) contextMenu.style.display = "none";
