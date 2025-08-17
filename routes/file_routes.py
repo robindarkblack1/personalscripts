@@ -17,7 +17,6 @@ def allowed_file(filename):
 @login_required
 def files():
     user_files = File.query.filter_by(user_id=current_user.id).all()
-    print(f"Found {len(user_files)} files for user {current_user.id}")
     return render_template('files.html', files=user_files)
 
 @file_routes.route('/upload', methods=['POST'])

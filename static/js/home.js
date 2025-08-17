@@ -13,10 +13,8 @@ window.addEventListener("load", function() {
 // the desktop or mobile experience based on screen width.
 document.addEventListener('DOMContentLoaded', () => {
     if (window.innerWidth >= 768) {
-        document.body.classList.add('desktop-view-active');
         initializeDesktopUI();
     } else {
-        document.body.classList.add('mobile-view-active');
         initializeMobileListeners();
     }
 });
@@ -42,11 +40,22 @@ function initializeDesktopUI() {
 
     const desktopIconsContainer = document.getElementById('desktop-icons');
     const startMenuAppsContainer = document.getElementById('start-menu-apps');
+
+    // Clear any existing icons
+    if(desktopIconsContainer) desktopIconsContainer.innerHTML = '';
+    if(startMenuAppsContainer) startMenuAppsContainer.innerHTML = '';
+
     const startButton = document.getElementById('start-button');
     const startMenu = document.getElementById('start-menu');
     const desktopTime = document.getElementById('desktop-time');
 
     apps.forEach(app => {
+        const desktopIcon = document.createElement('div');
+        desktopIcon.className = 'desktop-icon';
+        desktopIcon.innerHTML = `<div class="icon-image-wrapper"><i class="bi ${app.icon}"></i></div><div class="icon-label">${app.name}</div>`;
+        desktopIcon.addEventListener('click', () => createWindow(app));
+        desktopIconsContainer.appendChild(desktopIcon);
+
         const startMenuItem = document.createElement('div');
         startMenuItem.className = 'start-menu-app';
         startMenuItem.innerHTML = `<i class="bi ${app.icon}" style="font-size: 24px;"></i> <span>${app.name}</span>`;
@@ -59,18 +68,11 @@ function initializeDesktopUI() {
 
     if(startButton) startButton.addEventListener('click', (e) => {
         e.stopPropagation();
-        if(startMenu) {
-            const isVisible = startMenu.style.display === 'block';
-            startMenu.style.display = isVisible ? 'none' : 'block';
-            document.body.classList.toggle('body-no-scroll', !isVisible);
-        }
+        if(startMenu) startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
     });
 
     document.addEventListener('click', () => {
-        if(startMenu && startMenu.style.display === 'block') {
-            startMenu.style.display = 'none';
-            document.body.classList.remove('body-no-scroll');
-        }
+        if(startMenu) startMenu.style.display = 'none';
     });
     
     if(startMenu) startMenu.addEventListener('click', e => e.stopPropagation());
@@ -260,9 +262,6 @@ function makeDraggable(el) {
     if (header) header.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
-        if (e.target.classList.contains('window-control-btn')) {
-            return;
-        }
         e.preventDefault();
         pos3 = e.clientX;
         pos4 = e.clientY;
