@@ -11,7 +11,11 @@ window.addEventListener("load", function() {
 
 // This is the main entry point. It decides whether to run
 // the desktop or mobile experience based on screen width.
+let uiInitialized = false;
 document.addEventListener('DOMContentLoaded', () => {
+    if (uiInitialized) return;
+    uiInitialized = true;
+
     if (window.innerWidth >= 768) {
         initializeDesktopUI();
     } else {
@@ -40,11 +44,6 @@ function initializeDesktopUI() {
 
     const desktopIconsContainer = document.getElementById('desktop-icons');
     const startMenuAppsContainer = document.getElementById('start-menu-apps');
-
-    // Clear any existing icons
-    if(desktopIconsContainer) desktopIconsContainer.innerHTML = '';
-    if(startMenuAppsContainer) startMenuAppsContainer.innerHTML = '';
-
     const startButton = document.getElementById('start-button');
     const startMenu = document.getElementById('start-menu');
     const desktopTime = document.getElementById('desktop-time');
@@ -53,7 +52,7 @@ function initializeDesktopUI() {
         const desktopIcon = document.createElement('div');
         desktopIcon.className = 'desktop-icon';
         desktopIcon.innerHTML = `<div class="icon-image-wrapper"><i class="bi ${app.icon}"></i></div><div class="icon-label">${app.name}</div>`;
-        desktopIcon.addEventListener('click', () => createWindow(app));
+        desktopIcon.addEventListener('dblclick', () => createWindow(app));
         desktopIconsContainer.appendChild(desktopIcon);
 
         const startMenuItem = document.createElement('div');
