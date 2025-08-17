@@ -6,7 +6,6 @@ body {
     user-select: none;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
-    overflow: hidden; /* Prevent body scroll */
 }
 
 /* Preloader Container */
@@ -38,12 +37,12 @@ body {
 }
 
 /* Hide content until page is loaded */
-body {
+body:not(.loaded) {
     overflow: hidden; /* Prevent scrolling while loading */
 }
 
 /* Once loaded, show content */
-.loaded body {
+body.loaded {
     overflow: auto;
 }
 

@@ -1,3 +1,4 @@
+import requests
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from flask.helpers import flash
 from util.functions import tcolor,timetaken
@@ -11,6 +12,16 @@ todo = Blueprint('todo', __name__)
 
 
 
+def get_quote_of_the_day():
+    try:
+        response = requests.get("https://zenquotes.io/api/random")
+        response.raise_for_status()
+        quote_data = response.json()[0]
+        return f'"{quote_data["q"]}" - {quote_data["a"]}'
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching quote: {e}")
+        return "Could not fetch a quote at this time."
+
 try:
     @todo.route('/dashboard',methods=['POST','GET'])
     @login_required 
@@ -21,7 +32,8 @@ try:
             db.session.add(page)
             db.session.commit()
         data = Todo.query.filter_by(user_id=current_user.id).all()
-        return render_template('dashboard.html', todo=data,page=page)
+        quote = get_quote_of_the_day()
+        return render_template('dashboard.html', todo=data,page=page, quote=quote)
 
     def add_task(tit,desc):
         new_task =Todo(title=tit,description=desc,user_id=current_user.id)

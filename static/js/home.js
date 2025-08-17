@@ -257,6 +257,9 @@ function makeDraggable(el) {
     if (header) header.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
+        if (e.target.classList.contains('window-control-btn')) {
+            return;
+        }
         e.preventDefault();
         pos3 = e.clientX;
         pos4 = e.clientY;
