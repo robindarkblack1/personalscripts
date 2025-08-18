@@ -120,10 +120,6 @@
             <div class="insta"><i class="bi bi-instagram"></i></div>
             <span class="icon-label">Instagram</span>
         </a>
-        <a href="/files" class="icon-container" data-app="files" oncontextmenu="showContextMenu(event, 'files')">
-            <div class="icon1"><i class="bi bi-folder"></i></div>
-            <span class="icon-label">Files</span>
-        </a>
     </div>
     
     <div class="fourth-row">
@@ -307,22 +303,22 @@
         <button class="close-btn" onclick="closeSubmenu('apps-menu')">✖</button>
     </div>
     <div class="settings-list">
-        <div class="settings-item" onclick="showAppMenu('todo-menu')">
+        <div class="settings-item" data-menu="todo-menu">
             <i class="bi bi-list-check"></i> To-Do
         </div>
-        <div class="settings-item" onclick="showAppMenu('instagram-menu')">
+        <div class="settings-item" data-menu="instagram-menu">
             <i class="bi bi-instagram"></i> Instagram
         </div>
-        <div class="settings-item" onclick="showAppMenu('github-menu')">
+        <div class="settings-item" data-menu="github-menu">
             <i class="bi bi-github"></i> GitHub
         </div>
-        <div class="settings-item" onclick="showAppMenu('linkedin-menu')">
+        <div class="settings-item" data-menu="linkedin-menu">
             <i class="bi bi-linkedin"></i> LinkedIn
         </div>
-        <div class="settings-item" onclick="showAppMenu('activities-menu')">
+        <div class="settings-item" data-menu="activities-menu">
             <i class="bi bi-activity"></i> Activities
         </div>
-        <div class="settings-item" onclick="showAppMenu('chat-menu')">
+        <div class="settings-item" data-menu="chat-menu">
             <i class="bi bi-activity"></i> Chat
         </div>
     </div>

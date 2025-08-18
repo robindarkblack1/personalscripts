@@ -78,6 +78,9 @@ function initializeDesktopUI() {
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    const savedWallpaper = localStorage.getItem("customWallpaper");
+    document.body.style.backgroundImage = savedWallpaper ? `url('${savedWallpaper}')` : "url('../static/img/vivobg.png')";
 }
 
 
@@ -336,6 +339,12 @@ function initializeMobileListeners() {
         const appName = icon.dataset.app;
         if (localStorage.getItem(`hidden_${appName}`) === "true") icon.style.display = "none";
     });
+
+    document.querySelectorAll('[data-menu]').forEach(item => {
+        item.addEventListener('click', () => {
+            openSubmenu(item.dataset.menu);
+        });
+    });
     
     const tempSpan = document.querySelector('.time .small-text:last-child');
     if (tempSpan && tempSpan.textContent.trim().startsWith('°c')) {
@@ -376,6 +385,7 @@ function toggleSettings() {
 }
 
 function openSubmenu(menuId) {
+    console.log("openSubmenu called with menuId: " + menuId);
     const menu = document.getElementById(menuId + "-menu");
     if(menu) {
         menu.style.display = "flex";

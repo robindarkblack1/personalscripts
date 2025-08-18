@@ -8,6 +8,5 @@ class Config:
     CLIENT_ID = os.environ.get('CLIENT_ID') or 'default-client-id'
     CLIENT_SECRET = os.environ.get('CLIENT_SECRET') or 'default-client-secret'
     ACCESS_TOKEN_URL = os.environ.get('ACCESS_TOKEN_URL') or "https://oauth2.googleapis.com/token"
-    UPLOAD_FOLDER = 'uploads'
 
 config = Config()
