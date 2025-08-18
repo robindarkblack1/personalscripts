@@ -1317,7 +1317,8 @@ button:hover {
     z-index: 101;
     opacity: 0;
     transition: top 0.6s ease, opacity 0.3s ease;
-    overflow-y: auto;  /* Enables smooth scrolling */
+    overflow: auto;  /* Enables scrolling */
+    box-sizing: border-box; /* Ensure padding is included in height */
     font-family: 'Poppins', sans-serif; 
 }
 
