@@ -78,15 +78,6 @@ function initializeDesktopUI() {
     }
     setInterval(updateClock, 1000);
     updateClock();
-
-    const savedWallpaper = localStorage.getItem("customWallpaper");
-    if (savedWallpaper) {
-        console.log("Found saved wallpaper for desktop. Applying it.");
-        document.body.style.backgroundImage = `url('${savedWallpaper}')`;
-    } else {
-        console.log("No saved wallpaper for desktop. Using default.");
-        document.body.style.backgroundImage = "url('../static/img/vivobg.png')";
-    }
 }
 
 
@@ -349,12 +340,10 @@ function initializeMobileListeners() {
         const isScrollingDown = e.touches[0].clientY > startY;
         const swipeDistance = e.touches[0].clientY - startY;
 
-        console.log(`Swipe debug: atTop=${atTop}, isScrollingDown=${isScrollingDown}, swipeDistance=${swipeDistance}, panelOpen=${notificationPanelOpen}`);
-
         if (atTop && isScrollingDown) {
             e.preventDefault();
-            if (swipeDistance > 50 && !notificationPanelOpen) {
-                console.log("Threshold met, opening notification panel.");
+            // Open panel only if swipe is significant and panel is not already open
+            if (swipeDistance > 15 && !notificationPanelOpen) {
                 openNotificationPanel();
                 notificationPanelOpen = true;
             }
@@ -365,7 +354,6 @@ function initializeMobileListeners() {
     const panel = document.querySelector('.notification-card');
     if (panel) {
         panel.addEventListener('click', () => {
-            console.log("Closing notification panel.");
             closeNotificationPanel();
             notificationPanelOpen = false;
         });
@@ -386,18 +374,19 @@ function initializeMobileListeners() {
         tempSpan.style.display = 'none';
     }
 
+    // This function is called but was not defined. Defining it to prevent errors.
+    function preloadData() {
+        // In the future, this could be used to pre-fetch data.
+        // For now, it does nothing.
+        console.log("preloadData called.");
+    }
+
     preloadData();
     applySavedDarkMode();
     restoreAppStates();
     
     const savedWallpaper = localStorage.getItem("customWallpaper");
-    if (savedWallpaper) {
-        console.log("Found saved wallpaper for mobile. Applying it.");
-        document.body.style.backgroundImage = `url('${savedWallpaper}')`;
-    } else {
-        console.log("No saved wallpaper for mobile. Using default.");
-        document.body.style.backgroundImage = "url('../static/img/vivobg.png')";
-    }
+    document.body.style.backgroundImage = savedWallpaper ? `url('${savedWallpaper}')` : "url('../static/img/vivobg.png')";
 }
 
 function showContextMenu(event, appName) {
@@ -441,6 +430,22 @@ function closeSubmenu(menuId) {
     }
 }
 
+function showAppMenu(menuId) {
+    const menu = document.getElementById(menuId);
+    if(menu) {
+        menu.style.display = "flex";
+        setTimeout(() => menu.classList.add("show"), 10);
+    }
+}
+
+function hideAppMenu(menuId) {
+    const menu = document.getElementById(menuId);
+    if(menu) {
+        menu.classList.remove("show");
+        setTimeout(() => { menu.style.display = "none"; }, 400);
+    }
+}
+
 function openNotificationPanel() {
     const panel = document.querySelector('.notification-card');
     if (panel) {
@@ -475,10 +480,8 @@ function changeWallpaper(event) {
     if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            console.log("Saving wallpaper to localStorage...");
             localStorage.setItem("customWallpaper", e.target.result);
             document.body.style.backgroundImage = `url('${e.target.result}')`;
-            console.log("Wallpaper applied.");
         };
         reader.readAsDataURL(file);
     }
@@ -554,41 +557,12 @@ function closeFeedback() {
     if(feedbackCard) feedbackCard.style.display = 'none';
 }
 
-function toggleButton(buttonId) {
-    const button = document.getElementById(buttonId);
-    if (!button) return;
-
-    const appName = buttonId.replace('-btn', '');
-    const appIcon = document.querySelector(`.icon-container[data-app="${appName}"]`);
-    const storageKey = `disabled_${appName}`;
-
-    // Check if the app is currently disabled
-    const isDisabled = localStorage.getItem(storageKey) === 'true';
-
-    if (isDisabled) {
-        // If it's disabled, enable it
-        localStorage.removeItem(storageKey);
-        button.innerText = "Disable";
-        if (appIcon) appIcon.style.display = "flex";
-    } else {
-        // If it's enabled, disable it
-        localStorage.setItem(storageKey, 'true');
-        button.innerText = "Enable";
-        if (appIcon) appIcon.style.display = "none";
-    }
-}
-
 function restoreAppStates() {
     document.querySelectorAll(".app-info button").forEach(button => {
-        const appName = button.id.replace('-btn', '');
-        const appIcon = document.querySelector(`.icon-container[data-app="${appName}"]`);
-        const storageKey = `disabled_${appName}`;
-
-        const isDisabled = localStorage.getItem(storageKey) === 'true';
-
+        let appName = button.id.replace('-btn', '');
+        let appIcon = document.querySelector(`.icon-container[data-app="${appName}"]`);
+        let isDisabled = localStorage.getItem(appName) === "disabled";
         button.innerText = isDisabled ? "Enable" : "Disable";
-        if (appIcon) {
-            appIcon.style.display = isDisabled ? "none" : "flex";
-        }
+        if (appIcon) appIcon.style.display = isDisabled ? "none" : "flex";
     });
 }

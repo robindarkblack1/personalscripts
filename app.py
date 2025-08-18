@@ -1,6 +1,6 @@
 from flask import Flask, render_template,jsonify,request,Response,make_response
 from util.db import db, User , Webpage
-from config import Config
+from config import config
 from flask_login import LoginManager
 from datetime import datetime
 import pytz, requests, os, traceback
@@ -9,10 +9,10 @@ from util.helper import safe_import
 from util.auth import configure_oauth
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-def create_app(config_class=Config):
+def create_app():
     """Initialize and configure the Flask app."""
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    app.config.from_object(config)
     oauth = configure_oauth(app)
     db.init_app(app)
 
