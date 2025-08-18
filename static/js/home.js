@@ -25,6 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // =================================================== //
 
 function initializeDesktopUI() {
+    const savedWallpaper = localStorage.getItem("customWallpaper");
+    if (savedWallpaper) {
+        document.body.style.backgroundImage = `url('${savedWallpaper}')`;
+    }
+
     const apps = [
         { id: 'bio', name: 'My Bio', type: 'json', content: 'bio', icon: 'bi-person-badge' },
         { id: 'projects', name: 'Projects', type: 'json', content: 'projects', icon: 'bi-grid-fill' },
@@ -326,6 +331,65 @@ function initializeClonedSettings(clonedElement) {
 // =========== ORIGINAL MOBILE-ONLY SCRIPT =========== //
 // =================================================== //
 
+// Helper functions for mobile view, defined globally to avoid ReferenceErrors.
+function preloadData() {
+    // This function is called but was not defined. Defining it to prevent errors.
+    // In the future, this could be used to pre-fetch data.
+    console.log("preloadData called.");
+}
+
+function showAppMenu(menuId) {
+    const menu = document.getElementById(menuId);
+    if(menu) {
+        menu.style.display = "flex";
+        setTimeout(() => menu.classList.add("show"), 10);
+    }
+}
+
+function hideAppMenu(menuId) {
+    const menu = document.getElementById(menuId);
+    if(menu) {
+        menu.classList.remove("show");
+        setTimeout(() => { menu.style.display = "none"; }, 400);
+    }
+}
+
+function toggleButton(buttonId) {
+    const button = document.getElementById(buttonId);
+    if (!button) return;
+
+    const appName = buttonId.replace('-btn', '');
+    const appIcon = document.querySelector(`.icon-container[data-app="${appName}"]`);
+    const storageKey = `disabled_${appName}`;
+
+    const isDisabled = localStorage.getItem(storageKey) === 'true';
+
+    if (isDisabled) {
+        localStorage.removeItem(storageKey);
+        button.innerText = "Disable";
+        if (appIcon) appIcon.style.display = "flex";
+    } else {
+        localStorage.setItem(storageKey, 'true');
+        button.innerText = "Enable";
+        if (appIcon) appIcon.style.display = "none";
+    }
+}
+
+function openNotificationPanel() {
+    const panel = document.querySelector('.notification-card');
+    if (panel) {
+        panel.classList.add('show');
+    }
+}
+
+function closeNotificationPanel() {
+    const panel = document.querySelector('.notification-card');
+    if (panel) {
+        panel.classList.remove('show');
+    }
+}
+
+
 function initializeMobileListeners() {
     // --- Swipe-down for notification panel ---
     let startY = 0;
@@ -374,13 +438,6 @@ function initializeMobileListeners() {
         tempSpan.style.display = 'none';
     }
 
-    // This function is called but was not defined. Defining it to prevent errors.
-    function preloadData() {
-        // In the future, this could be used to pre-fetch data.
-        // For now, it does nothing.
-        console.log("preloadData called.");
-    }
-
     preloadData();
     applySavedDarkMode();
     restoreAppStates();
@@ -427,36 +484,6 @@ function closeSubmenu(menuId) {
     if(menu) {
         menu.classList.remove("show");
         setTimeout(() => { menu.style.display = "none"; }, 400);
-    }
-}
-
-function showAppMenu(menuId) {
-    const menu = document.getElementById(menuId);
-    if(menu) {
-        menu.style.display = "flex";
-        setTimeout(() => menu.classList.add("show"), 10);
-    }
-}
-
-function hideAppMenu(menuId) {
-    const menu = document.getElementById(menuId);
-    if(menu) {
-        menu.classList.remove("show");
-        setTimeout(() => { menu.style.display = "none"; }, 400);
-    }
-}
-
-function openNotificationPanel() {
-    const panel = document.querySelector('.notification-card');
-    if (panel) {
-        panel.classList.add('show');
-    }
-}
-
-function closeNotificationPanel() {
-    const panel = document.querySelector('.notification-card');
-    if (panel) {
-        panel.classList.remove('show');
     }
 }
 
@@ -559,10 +586,15 @@ function closeFeedback() {
 
 function restoreAppStates() {
     document.querySelectorAll(".app-info button").forEach(button => {
-        let appName = button.id.replace('-btn', '');
-        let appIcon = document.querySelector(`.icon-container[data-app="${appName}"]`);
-        let isDisabled = localStorage.getItem(appName) === "disabled";
+        const appName = button.id.replace('-btn', '');
+        const appIcon = document.querySelector(`.icon-container[data-app="${appName}"]`);
+        const storageKey = `disabled_${appName}`;
+
+        const isDisabled = localStorage.getItem(storageKey) === 'true';
+
         button.innerText = isDisabled ? "Enable" : "Disable";
-        if (appIcon) appIcon.style.display = isDisabled ? "none" : "flex";
+        if (appIcon) {
+            appIcon.style.display = isDisabled ? "none" : "flex";
+        }
     });
 }
