@@ -331,65 +331,6 @@ function initializeClonedSettings(clonedElement) {
 // =========== ORIGINAL MOBILE-ONLY SCRIPT =========== //
 // =================================================== //
 
-// Helper functions for mobile view, defined globally to avoid ReferenceErrors.
-function preloadData() {
-    // This function is called but was not defined. Defining it to prevent errors.
-    // In the future, this could be used to pre-fetch data.
-    console.log("preloadData called.");
-}
-
-function showAppMenu(menuId) {
-    const menu = document.getElementById(menuId);
-    if(menu) {
-        menu.style.display = "flex";
-        setTimeout(() => menu.classList.add("show"), 10);
-    }
-}
-
-function hideAppMenu(menuId) {
-    const menu = document.getElementById(menuId);
-    if(menu) {
-        menu.classList.remove("show");
-        setTimeout(() => { menu.style.display = "none"; }, 400);
-    }
-}
-
-function toggleButton(buttonId) {
-    const button = document.getElementById(buttonId);
-    if (!button) return;
-
-    const appName = buttonId.replace('-btn', '');
-    const appIcon = document.querySelector(`.icon-container[data-app="${appName}"]`);
-    const storageKey = `disabled_${appName}`;
-
-    const isDisabled = localStorage.getItem(storageKey) === 'true';
-
-    if (isDisabled) {
-        localStorage.removeItem(storageKey);
-        button.innerText = "Disable";
-        if (appIcon) appIcon.style.display = "flex";
-    } else {
-        localStorage.setItem(storageKey, 'true');
-        button.innerText = "Enable";
-        if (appIcon) appIcon.style.display = "none";
-    }
-}
-
-function openNotificationPanel() {
-    const panel = document.querySelector('.notification-card');
-    if (panel) {
-        panel.classList.add('show');
-    }
-}
-
-function closeNotificationPanel() {
-    const panel = document.querySelector('.notification-card');
-    if (panel) {
-        panel.classList.remove('show');
-    }
-}
-
-
 function initializeMobileListeners() {
     // --- Swipe-down for notification panel ---
     let startY = 0;
