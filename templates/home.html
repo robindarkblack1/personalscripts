@@ -303,22 +303,22 @@
         <button class="close-btn" onclick="closeSubmenu('apps-menu')">✖</button>
     </div>
     <div class="settings-list">
-        <div class="settings-item" data-menu="todo">
+        <div class="settings-item" onclick="showAppMenu('todo-menu')">
             <i class="bi bi-list-check"></i> To-Do
         </div>
-        <div class="settings-item" data-menu="instagram">
+        <div class="settings-item" onclick="showAppMenu('instagram-menu')">
             <i class="bi bi-instagram"></i> Instagram
         </div>
-        <div class="settings-item" data-menu="github">
+        <div class="settings-item" onclick="showAppMenu('github-menu')">
             <i class="bi bi-github"></i> GitHub
         </div>
-        <div class="settings-item" data-menu="linkedin">
+        <div class="settings-item" onclick="showAppMenu('linkedin-menu')">
             <i class="bi bi-linkedin"></i> LinkedIn
         </div>
-        <div class="settings-item" data-menu="activities">
+        <div class="settings-item" onclick="showAppMenu('activities-menu')">
             <i class="bi bi-activity"></i> Activities
         </div>
-        <div class="settings-item" data-menu="chat">
+        <div class="settings-item" onclick="showAppMenu('chat-menu')">
             <i class="bi bi-activity"></i> Chat
         </div>
     </div>
@@ -327,7 +327,7 @@
 <div id="todo-menu" class="settings-submenu app-submenu">
     <div class="settings-header">
         <span>To-Do App</span>
-        <button class="close-btn" onclick="closeSubmenu('todo-menu')">✖</button>
+        <button class="close-btn" onclick="hideAppMenu('todo-menu')">✖</button>
     </div>
     <div class="app-info">
         <p><strong>Version:</strong> 1.0</p>
@@ -340,7 +340,7 @@
 <div id="instagram-menu" class="settings-submenu app-submenu">
     <div class="settings-header">
         <span>Instagram</span>
-        <button class="close-btn" onclick="closeSubmenu('instagram-menu')">✖</button>
+        <button class="close-btn" onclick="hideAppMenu('instagram-menu')">✖</button>
     </div>
     <div class="app-info">
         <p><strong>Version:</strong> 2.0</p>
@@ -353,7 +353,7 @@
 <div id="github-menu" class="settings-submenu app-submenu">
     <div class="settings-header">
         <span>GitHub</span>
-        <button class="close-btn" onclick="closeSubmenu('github-menu')">✖</button>
+        <button class="close-btn" onclick="hideAppMenu('github-menu')">✖</button>
     </div>
     <div class="app-info">
         <p><strong>Version:</strong> 1.5</p>
@@ -366,7 +366,7 @@
 <div id="linkedin-menu" class="settings-submenu app-submenu">
     <div class="settings-header">
         <span>LinkedIn</span>
-        <button class="close-btn" onclick="closeSubmenu('linkedin-menu')">✖</button>
+        <button class="close-btn" onclick="hideAppMenu('linkedin-menu')">✖</button>
     </div>
     <div class="app-info">
         <p><strong>Version:</strong> 3.2</p>
@@ -379,7 +379,7 @@
 <div id="activities-menu" class="settings-submenu app-submenu">
     <div class="settings-header">
         <span>Activities</span>
-        <button class="close-btn" onclick="closeSubmenu('activities-menu')">✖</button>
+        <button class="close-btn" onclick="hideAppMenu('activities-menu')">✖</button>
     </div>
     <div class="app-info">
         <p><strong>Version:</strong> 1.0</p>
@@ -391,7 +391,7 @@
 <div id="chat-menu" class="settings-submenu app-submenu">
     <div class="settings-header">
         <span>Click Chat</span>
-        <button class="close-btn" onclick="closeSubmenu('chat-menu')">✖</button>
+        <button class="close-btn" onclick="hideAppMenu('chat-menu')">✖</button>
     </div>
     <div class="app-info">
         <p><strong>Version:</strong> 1.0</p>
