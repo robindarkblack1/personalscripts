@@ -11,11 +11,7 @@ window.addEventListener("load", function() {
 
 // This is the main entry point. It decides whether to run
 // the desktop or mobile experience based on screen width.
-let uiInitialized = false;
 document.addEventListener('DOMContentLoaded', () => {
-    if (uiInitialized) return;
-    uiInitialized = true;
-
     if (window.innerWidth >= 768) {
         initializeDesktopUI();
     } else {

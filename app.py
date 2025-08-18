@@ -9,10 +9,10 @@ from util.helper import safe_import
 from util.auth import configure_oauth
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-def create_app(config_object=config):
+def create_app():
     """Initialize and configure the Flask app."""
     app = Flask(__name__)
-    app.config.from_object(config_object)
+    app.config.from_object(config)
     oauth = configure_oauth(app)
     db.init_app(app)
 
