@@ -78,6 +78,9 @@ function initializeDesktopUI() {
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    const savedWallpaper = localStorage.getItem("customWallpaper");
+    document.body.style.backgroundImage = savedWallpaper ? `url('${savedWallpaper}')` : "url('../static/img/vivobg.png')";
 }
 
 
@@ -327,8 +330,10 @@ function initializeClonedSettings(clonedElement) {
 // =================================================== //
 
 function initializeMobileListeners() {
-    // Prevent pull-to-refresh which causes page reload.
+    // --- Swipe-down for notification panel ---
     let startY = 0;
+    let notificationPanelOpen = false;
+
     document.body.addEventListener('touchstart', (e) => {
         startY = e.touches[0].clientY;
     }, { passive: true });
@@ -336,12 +341,26 @@ function initializeMobileListeners() {
     document.body.addEventListener('touchmove', (e) => {
         const atTop = window.scrollY === 0;
         const isScrollingDown = e.touches[0].clientY > startY;
+        const swipeDistance = e.touches[0].clientY - startY;
 
         if (atTop && isScrollingDown) {
-            // Prevent the browser's default pull-to-refresh action
             e.preventDefault();
+            // Open panel only if swipe is significant and panel is not already open
+            if (swipeDistance > 50 && !notificationPanelOpen) {
+                openNotificationPanel();
+                notificationPanelOpen = true;
+            }
         }
     }, { passive: false });
+
+    // Add click listener to the notification panel to close it
+    const panel = document.querySelector('.notification-card');
+    if (panel) {
+        panel.addEventListener('click', () => {
+            closeNotificationPanel();
+            notificationPanelOpen = false;
+        });
+    }
 
     document.addEventListener("click", () => {
         const contextMenu = document.getElementById("context-menu");
@@ -417,11 +436,17 @@ function hideAppMenu(menuId) {
     }
 }
 
-function closeSubmenu(menuId) {
-    const menu = document.getElementById(menuId);
-    if(menu) {
-        menu.classList.remove("show");
-        setTimeout(() => { menu.style.display = "none"; }, 400);
+function openNotificationPanel() {
+    const panel = document.querySelector('.notification-card');
+    if (panel) {
+        panel.classList.add('show');
+    }
+}
+
+function closeNotificationPanel() {
+    const panel = document.querySelector('.notification-card');
+    if (panel) {
+        panel.classList.remove('show');
     }
 }
 
