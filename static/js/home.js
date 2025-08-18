@@ -330,6 +330,22 @@ function initializeClonedSettings(clonedElement) {
 // =================================================== //
 
 function initializeMobileListeners() {
+    // Prevent pull-to-refresh which causes page reload.
+    let startY = 0;
+    document.body.addEventListener('touchstart', (e) => {
+        startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.body.addEventListener('touchmove', (e) => {
+        const atTop = window.scrollY === 0;
+        const isScrollingDown = e.touches[0].clientY > startY;
+
+        if (atTop && isScrollingDown) {
+            // Prevent the browser's default pull-to-refresh action
+            e.preventDefault();
+        }
+    }, { passive: false });
+
     document.addEventListener("click", () => {
         const contextMenu = document.getElementById("context-menu");
         if (contextMenu) contextMenu.style.display = "none";
