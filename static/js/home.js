@@ -341,6 +341,11 @@ function initializeMobileListeners() {
     }, { passive: true });
 
     document.body.addEventListener('touchmove', (e) => {
+        // If the swipe is inside a scrollable popup, do nothing.
+        if (e.target.closest('.small-window')) {
+            return;
+        }
+
         const atTop = window.scrollY === 0;
         const isScrollingDown = e.touches[0].clientY > startY;
         const swipeDistance = e.touches[0].clientY - startY;
@@ -425,6 +430,25 @@ function closeSubmenu(menuId) {
     if(menu) {
         menu.classList.remove("show");
         setTimeout(() => { menu.style.display = "none"; }, 400);
+    }
+}
+
+function openNotificationPanel() {
+    console.log("Attempting to open notification panel...");
+    const panel = document.querySelector('.notification-card');
+    if (panel) {
+        console.log("Found panel element:", panel);
+        panel.classList.add('show');
+        console.log("Added .show class to panel. Class list:", panel.classList);
+    } else {
+        console.error("Could not find .notification-card element!");
+    }
+}
+
+function closeNotificationPanel() {
+    const panel = document.querySelector('.notification-card');
+    if (panel) {
+        panel.classList.remove('show');
     }
 }
 
